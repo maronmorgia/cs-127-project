@@ -1,16 +1,50 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Schibsted_Grotesk } from 'next/font/google';
+import { Roboto } from "next/font/google";
+import localFont from 'next/font/local';
+
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const roboto = Roboto({
+  weight:['200'],
+  subsets:['latin'],
+  variable:'--font-roboto',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const schibsted = Schibsted_Grotesk({
+  weight: ['400', '600', '500'],
+  subsets: ['latin'],
+  variable: '--font-schibsted',
 });
+
+const camptonBold = localFont({
+  src: '../public/fonts/CamptonBold.woff',
+  weight: '700',
+  style: 'normal',
+  variable: '--font-campton-bold', 
+});
+
+const camptonMedium = localFont({
+  src: '../public/fonts/CamptonMedium.woff',
+  weight: '500',
+  style: 'normal',
+  variable: '--font-campton-medium',
+});
+
+const camptonBook = localFont({
+  src: '../public/fonts/CamptonBook.woff',
+  weight: '400',
+  style: 'normal',
+  variable: '--font-campton-book',
+});
+
+const camptonSemiBold = localFont({
+  src: '../public/fonts/CamptonSemiBold.woff',
+  weight: '600',
+  style: 'normal',
+  variable: '--font-campton-semibold',
+});
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${schibsted.variable} ${camptonMedium.variable} ${camptonBold.variable} ${camptonBook.variable} ${camptonSemiBold.variable} ${roboto.variable} antialiased`}
       >
         {children}
       </body>
