@@ -6,101 +6,38 @@
 }
 
 @theme {
-  /* FONT SIZES */
-  --display1-size: 72px;
-  --display2-size: 60px;
-  --h1-size: 48px;
-  --h2-size: 30px;
-  --h3-size: 24px;
-  --h4-size: 20px;
-  --p-size: 16px;
-  --lead-size: 20px;
-  --large-size: 18px;
-  --small-size: 14px;
-  --subtle-size: 14px;
-
   /* BACKGROUND COLOR */
   --color-dark-gray: #302c34;
 }
 
-/*  CUSTOM FONT STYLES  */
-.display1 {
-  font-family: var(--font-campton-bold);
-  font-size: var(--display1-size);
-  text-transform: uppercase;
+/* CUSTOM FONT STYLES */
+.display1, .display2, h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-campton);
 }
 
-.display2 {
-  font-family: var(--font-campton-bold);
-  font-size: var(--display2-size);
-  text-transform: uppercase;
-}
-
-.h1 {
-  font-family: var(--font-campton-bold);
-  font-size: var(--h1-size);
-}
-
-.h2 {
-  font-family: var(--font-weight-semibold);
-  font-size: var(--h2-size);
-}
-
-.h3 {
-  font-family: var(--font-campton-medium);
-  font-size: var(--h3-size);
-}
-
-.h4 {
-  font-family: var(--font-campton-book);
-  font-size: var(--h4-size);
-}
-
-
-.p {
+p, blockquote {
   font-family: var(--font-schibsted);
-  font-size: var(--p-size);
-}
-
-
-.blockquote {
-  font-family: var(--font-schibsted);
-  font-style: italic;
-  font-size: var(--p-size);
-}
-
-.inline-code {
-  font-family: var(--font-campton-bold);
-  font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.lead {
-  font-family: var(--font-schibsted);
-  font-size: var(--lead-size);
-  font-weight: 600;
-}
-
-.large {
-  font-family: var(--font-schibsted);
-  font-size: var(--large-size);
-  font-weight: 600;
-}
-
-.small {
-  font-family: var(--font-schibsted);
-  font-size: var(--small-size);
-  font-weight: 500;
 }
 
 .subtle {
   font-family: var(--font-roboto);
-  font-size: var(--subtle-size);
-  font-weight: 200;
 }
 
+.display1 { @apply font-bold text-7xl; }
+.display2 { @apply font-bold text-6xl; }
+h1 { @apply font-bold text-5xl; }
+h2 { @apply font-semibold text-3xl; }
+h3 { @apply font-medium text-2xl; }
+h4 { @apply font-normal text-xl; }
+p { @apply font-normal text-base; }
+blockquote { @apply italic text-base; }
+.inline-code { @apply font-bold text-sm bg-white/10 px-1 py-0.5 rounded; }
+.lead { @apply font-semibold text-xl; }
+.large { @apply font-semibold text-lg}
+.small { @apply font-medium text-sm}
+.subtle { @apply font-extralight text-sm; }
+
+/* DARK MODE */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

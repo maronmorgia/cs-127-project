@@ -17,34 +17,30 @@ const schibsted = Schibsted_Grotesk({
   variable: '--font-schibsted',
 });
 
-const camptonBold = localFont({
-  src: '../public/fonts/CamptonBold.woff',
-  weight: '700',
-  style: 'normal',
-  variable: '--font-campton-bold', 
+const campton = localFont({
+  src: [{
+    path:'../public/fonts/CamptonBold.woff',
+    weight: '700',
+    style: 'normal',
+  },
+  {
+    path: '../public/fonts/CamptonMedium.woff',
+    weight: '500',
+    style: 'normal',
+  },
+  {
+    path: '../public/fonts/CamptonBook.woff',
+    weight: '400',
+    style: 'normal',
+  },
+  {
+    path: '../public/fonts/CamptonSemiBold.woff',
+    weight: '600',
+    style: 'normal',
+  },
+  ],
+  variable: '--font-campton',
 });
-
-const camptonMedium = localFont({
-  src: '../public/fonts/CamptonMedium.woff',
-  weight: '500',
-  style: 'normal',
-  variable: '--font-campton-medium',
-});
-
-const camptonBook = localFont({
-  src: '../public/fonts/CamptonBook.woff',
-  weight: '400',
-  style: 'normal',
-  variable: '--font-campton-book',
-});
-
-const camptonSemiBold = localFont({
-  src: '../public/fonts/CamptonSemiBold.woff',
-  weight: '600',
-  style: 'normal',
-  variable: '--font-campton-semibold',
-});
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -59,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${schibsted.variable} ${camptonMedium.variable} ${camptonBold.variable} ${camptonBook.variable} ${camptonSemiBold.variable} ${roboto.variable} antialiased`}
+        className={`${schibsted.variable} ${campton.variable} ${roboto.variable} antialiased`}
       >
         {children}
       </body>
