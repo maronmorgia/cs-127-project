@@ -8,6 +8,35 @@
 @theme {
   /* BACKGROUND COLOR */
   --color-dark-gray: #302c34;
+
+  /* CUSTOM COLOR PALLETE */
+  /* NEUTRAL */
+  --color-neutral-50: oklch(98.51% 0 0);
+  --color-neutral-100: oklch(97.02% 0 0);
+  --color-neutral-200: oklch(92.19% 0 0);
+  --color-neutral-300: oklch(86.99% 0 0);
+  --color-neutral-400: oklch(71.55% 0 0);
+  --color-neutral-500: oklch(55.55% 0 0);
+  --color-neutral-600: oklch(43.86% 0 0);
+  --color-neutral-700: oklch(37.15% 0 0);
+  --color-neutral-800: oklch(26.86% 0 0);
+  --color-neutral-900: oklch(20.46% 0 0); 
+
+  /* PRIMARY */
+  --color-primary-50: oklch(95% 0.05 150);
+  --color-primary-100: oklch(85% 0.12 150);
+  --color-primary-200: oklch(75% 0.18 150);
+  --color-primary-300: oklch(65% 0.23 150);
+  --color-primary-400: oklch(55% 0.28 150);
+  --color-primary-500: oklch(45% 0.30 150);
+
+  /* SECONDARY */
+  --color-secondary-50: oklch(95% 0.07 80);
+  --color-secondary-100: oklch(85% 0.15 80);
+  --color-secondary-200: oklch(75% 0.23 80);
+  --color-secondary-300: oklch(65% 0.28 80);
+  --color-secondary-400: oklch(55% 0.32 80);
+  --color-secondary-500: oklch(45% 0.35 80);
 }
 
 /* CUSTOM FONT STYLES */
