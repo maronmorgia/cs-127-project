@@ -1,6 +1,6 @@
 'use client';
 
-import { logout } from "./login/actions";
+import { logout } from "./admin/login/actions";
 
 export default function Home() {
   return (
