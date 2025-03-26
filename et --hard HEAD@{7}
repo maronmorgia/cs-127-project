@@ -1,0 +1,51 @@
+[33md0ea10c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m1-login-feature[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33md0ea10c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m1-login-feature[m[33m)[m HEAD@{1}: rebase (finish): returning to refs/heads/1-login-feature
+[33md0ea10c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m1-login-feature[m[33m)[m HEAD@{2}: rebase (pick): feat: finished user auth
+[33m497e56a[m HEAD@{3}: rebase (continue): feat: finished merging Conflicts
+[33m4a68132[m HEAD@{4}: rebase (start): checkout origin/staging
+[33m704c61d[m HEAD@{5}: commit (merge): feat: resolved merge conflict
+[33m4a68132[m HEAD@{6}: rebase (finish): returning to refs/heads/1-login-feature
+[33m4a68132[m HEAD@{7}: rebase (pick): feat: finished login feature changes
+[33me7f5f56[m HEAD@{8}: rebase (pick): Feat: Move login functionality into App Admin, (not fixed page.tsx in admin)
+[33mf54e319[m HEAD@{9}: rebase (pick): feat: Added logout functionality
+[33mb8d7002[m HEAD@{10}: rebase (pick): feat: finished user auth
+[33m022249d[m HEAD@{11}: rebase (pick): feat: create route handler for confirmation
+[33m5f5b402[m HEAD@{12}: rebase (pick): feat: Setup basic landing page with minor error handling
+[33mc3db9fb[m HEAD@{13}: rebase (pick): feat: Hooked up middleware
+[33m0a636e5[m HEAD@{14}: rebase (pick): feat: write functions for client
+[33md03d4bc[m[33m ([m[1;31morigin/staging[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{15}: rebase (start): checkout origin/staging
+[33m327a621[m HEAD@{16}: commit: feat: finished login feature changes
+[33maeaabab[m HEAD@{17}: commit: Feat: Move login functionality into App Admin, (not fixed page.tsx in admin)
+[33mab9b305[m HEAD@{18}: reset: moving to ab9b305
+[33mab9b305[m HEAD@{19}: reset: moving to ab9b305
+[33mab9b305[m HEAD@{20}: reset: moving to ab9b305
+[33mab9b305[m HEAD@{21}: reset: moving to ab9b305
+[33mab9b305[m HEAD@{22}: commit: feat: Added logout functionality
+[33m563a287[m[33m ([m[1;31morigin/1-login-feature[m[33m)[m HEAD@{23}: reset: moving to 563a287
+[33m563a287[m[33m ([m[1;31morigin/1-login-feature[m[33m)[m HEAD@{24}: reset: moving to 563a287
+[33mb7db7e1[m HEAD@{25}: commit: feat: added logout functionality
+[33m59846cf[m HEAD@{26}: reset: moving to 59846cf
+[33m5d97eb5[m HEAD@{27}: reset: moving to 5d97eb5
+[33m8b4ea15[m HEAD@{28}: reset: moving to HEAD
+[33m8b4ea15[m HEAD@{29}: revert: Revert "feat: create route handler for confirmation"
+[33m59846cf[m HEAD@{30}: revert: Revert "feat: finished user auth"
+[33m563a287[m[33m ([m[1;31morigin/1-login-feature[m[33m)[m HEAD@{31}: reset: moving to 563a287
+[33m563a287[m[33m ([m[1;31morigin/1-login-feature[m[33m)[m HEAD@{32}: commit: feat: finished user auth
+[33m5d97eb5[m HEAD@{33}: commit: feat: create route handler for confirmation
+[33m84096cf[m HEAD@{34}: commit: feat: Setup basic landing page with minor error handling
+[33mbc53aaf[m HEAD@{35}: commit: feat: Hooked up middleware
+[33md6ed47b[m HEAD@{36}: commit: feat: write functions for client
+[33mf5bd861[m[33m ([m[1;32mstaging[m[33m)[m HEAD@{37}: checkout: moving from staging to 1-login-feature
+[33mf5bd861[m[33m ([m[1;32mstaging[m[33m)[m HEAD@{38}: pull: Fast-forward
+[33md40e407[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{39}: checkout: moving from 1-login-feature to staging
+[33mf5bd861[m[33m ([m[1;32mstaging[m[33m)[m HEAD@{40}: checkout: moving from staging to 1-login-feature
+[33md40e407[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{41}: checkout: moving from 9-creating-envexampl to staging
+[33mcebf511[m[33m ([m[1;31morigin/9-creating-envexampl[m[33m, [m[1;32m9-creating-envexampl[m[33m)[m HEAD@{42}: commit: feat: added .env.example & changed gitignore
+[33m2e9f8c2[m HEAD@{43}: checkout: moving from 1-login-feature to 9-creating-envexampl
+[33md8ee3d5[m HEAD@{44}: commit: feat: redid user auth
+[33md40e407[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{45}: reset: moving to origin/main
+[33m3c70956[m HEAD@{46}: pull: Fast-forward
+[33md40e407[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{47}: reset: moving to origin/main
+[33m3c70956[m HEAD@{48}: commit: feat: add login feat, implement supabase
+[33md40e407[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{49}: checkout: moving from staging to 1-login-feature
+[33md40e407[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{50}: clone: from https://github.com/jnvillamor/cs-127-project.git
