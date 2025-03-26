@@ -1,7 +1,17 @@
+'use client';
+
+import { logout } from "./login/actions";
 
 export default function Home() {
   return (
     <div className="p-8 bg-dark-gray text-gray-200 space-y-8">
+      <button 
+        className="px-4 py-2 bg-red-500 text-white rounded" 
+        onClick={async () => { await logout(); }}
+      >
+        Logout
+      </button>
+
       {/* Display1 */}
       <div>
         <p className="p">Display1 - Campton Bold Uppercase 72px</p>
