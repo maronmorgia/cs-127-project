@@ -8,7 +8,7 @@ export default function ErrorPage() {
   return (
     <div>
       <p>Sorry, something went wrong</p>
-      <button onClick={() => router.push('/login')}>Go to Login</button>
+      <button onClick={() => router.push('/admin/login')}>Go to Login</button>
     </div>
   )
 }
