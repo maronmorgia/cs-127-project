@@ -1,5 +1,3 @@
-'use client';
-
 import { logout } from './admin/login/actions';
 
 export default function Home() {
