@@ -1,4 +1,4 @@
-import { login } from './actions';
+import { login } from "@/utils/supabase/authentications";
 
 export default function LoginPage() {
   return (

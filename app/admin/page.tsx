@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { logout } from './login/actions'; // adjust the path as needed
+import { logout } from '@/utils/supabase/authentications'; // adjust the path as needed
 
 export default async function PrivatePage() {
   const supabase = await createClient();
