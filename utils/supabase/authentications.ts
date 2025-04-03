@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 import { createClient } from './server';
 
 export async function login(formData: FormData) {
@@ -34,27 +34,25 @@ export async function logout() {
 
 export const signWithGoogle = async () => {
   const supabase = await createClient();
-  const originUrl = (await headers()).get("origin");
+  const originUrl = (await headers()).get('origin');
 
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
+    provider: 'google',
     options: {
       redirectTo: `${originUrl}/auth/callback`,
       queryParams: {
-        hd: "up.edu.ph",
+        hd: 'up.edu.ph',
       },
     },
   });
 
   if (data.url) {
-    revalidatePath("/", "layout");
+    revalidatePath('/', 'layout');
     redirect(data.url);
   }
 
   if (error) {
-    console.error("Error signing in with Google:", error.message);
+    console.error('Error signing in with Google:', error.message);
     redirect(`/error?error=${error.message}`);
   }
 };
-
-  
