@@ -1,6 +1,6 @@
 'use client';
 
-import { logout } from "@/utils/supabase/authentications";
+import { logout } from '@/utils/supabase/authentications';
 
 export default function Home() {
   return (
