@@ -33,25 +33,28 @@ export async function logout() {
 }
 
 export const signWithGoogle = async () => {
+  const supabase = await createClient();
+  const originUrl = (await headers()).get("origin");
 
-    const supabase = await createClient();
-    const originUrl = (await headers()).get('origin');
-  
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${originUrl}/auth/callback`,
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${originUrl}/auth/callback`,
+      queryParams: {
+        hd: "up.edu.ph",
       },
-    })
-    
-    if (data.url) {
-      revalidatePath('/', 'layout');
-      redirect(data.url) // use the redirect API for your server framework
-    }
-  
-    if (error) {
-      console.error('Error signing in with Google:', error.message)
-      redirect(`/error?error=${error.message}`)
-    }
+    },
+  });
+
+  if (data.url) {
+    revalidatePath("/", "layout");
+    redirect(data.url);
   }
+
+  if (error) {
+    console.error("Error signing in with Google:", error.message);
+    redirect(`/error?error=${error.message}`);
+  }
+};
+
   
