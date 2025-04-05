@@ -54,8 +54,8 @@ export async function updateSession(request: NextRequest) {
     !pathname.startsWith('/auth')
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = '/admin/login';
-    return NextResponse.redirect(url);
+    url.pathname = '/';
+    // return NextResponse.redirect(url);
   }
 
   // Redirect unauthenticated users from all other protected pages
