@@ -29,12 +29,12 @@ export default async function PrivatePage() {
         Hello {data.user.email}, Role: {userRole}
       </p>
       <div className='space-x-4'>
-      <form action={logout}>
-        <button type='submit'>Logout</button>
-      </form>
-      <a href = '/admin/reset-password'>
-        <button>Change password</button>
-      </a>
+        <form action={logout}>
+          <button type='submit'>Logout</button>
+        </form>
+        <a href='/admin/reset-password'>
+          <button>Change password</button>
+        </a>
       </div>
     </>
   );
