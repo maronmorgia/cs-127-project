@@ -31,6 +31,9 @@ export default async function PrivatePage() {
       <form action={logout}>
         <button type='submit'>Logout</button>
       </form>
+      <a href = '/admin/reset-password'>
+        <button>Change password</button>
+      </a>
     </>
   );
 }
