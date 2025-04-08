@@ -80,11 +80,12 @@ export async function updatePassword(formData: FormData) {
   // Should not be lesser than 8 characters
   if (
     newPassword.length < 8 ||
-    !/[a-zA-Z]/.test(newPassword) || 
-    !/[0-9]/.test(newPassword)      
+    !/[a-zA-Z]/.test(newPassword) ||
+    !/[0-9]/.test(newPassword)
   ) {
     return {
-      error: 'Password must be at least 8 characters long and include a letter and a number.',
+      error:
+        'Password must be at least 8 characters long and include a letter and a number.',
     };
   }
 
@@ -101,7 +102,7 @@ export async function updatePassword(formData: FormData) {
     return { error: 'User not authenticated.' };
   }
 
-  // Ensures that users entered their password correctly 
+  // Ensures that users entered their password correctly
   const { error: reauthError } = await supabase.auth.signInWithPassword({
     email: user.email!, // Access the email here
     password: currentPassword,
@@ -121,6 +122,3 @@ export async function updatePassword(formData: FormData) {
   // Return success message if everything went well
   return { success: 'Password updated successfully.' };
 }
-
-
-
