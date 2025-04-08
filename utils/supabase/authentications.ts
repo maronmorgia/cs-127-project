@@ -58,11 +58,11 @@ export const signWithGoogle = async () => {
 };
 
 // Function to handle password change
-export async function updatePassword(formData:FormData) {
-  const supabase = await createClient ();
+export async function updatePassword(formData: FormData) {
+  const supabase = await createClient();
 
-  // Extract values inputted into the forms
-  const currentPassword = formData.get('currentPassword') as string
+  // Extract values inputted into the form
+  const currentPassword = formData.get('currentPassword') as string;
   const newPassword = formData.get('newPassword') as string;
   const confirmPassword = formData.get('confirmPassword') as string;
 
@@ -76,9 +76,9 @@ export async function updatePassword(formData:FormData) {
     return { error: 'New password and confirm password do not match.' };
   }
 
-   // Validation so that the password must include at least one letter and one number
-   // Should not be lesser than 8 characters
-   if (
+  // Validation so that the password must include at least one letter and one number
+  // Should not be lesser than 8 characters
+  if (
     newPassword.length < 8 ||
     !/[a-zA-Z]/.test(newPassword) || 
     !/[0-9]/.test(newPassword)      
@@ -88,23 +88,29 @@ export async function updatePassword(formData:FormData) {
     };
   }
 
-  // Get the current session to access the user
-  const session = await supabase.auth.getSession();
-  const user = session.data.session?.user;
+  // Securely get the user object using supabase.auth.getUser()
+  const { data, error: userError } = await supabase.auth.getUser();
 
-  // Ensure the user is authenticated
-  if (!user) return { error: 'Not authenticated.' };
+  if (userError) {
+    return { error: 'Unable to retrieve user data from Supabase.' };
+  }
+
+  const user = data?.user; // Access the user object here
+
+  if (!user) {
+    return { error: 'User not authenticated.' };
+  }
 
   // Ensures that users entered their password correctly 
   const { error: reauthError } = await supabase.auth.signInWithPassword({
-    email: user.email!,
+    email: user.email!, // Access the email here
     password: currentPassword,
   });
 
-   // If the current password is incorrect show error
-   if (reauthError) return { error: 'Current password is incorrect.' };
+  // If the current password is incorrect show error
+  if (reauthError) return { error: 'Current password is incorrect.' };
 
-   // Update the user's password
+  // Update the user's password
   const { error: updateError } = await supabase.auth.updateUser({
     password: newPassword,
   });
@@ -115,4 +121,6 @@ export async function updatePassword(formData:FormData) {
   // Return success message if everything went well
   return { success: 'Password updated successfully.' };
 }
+
+
 
