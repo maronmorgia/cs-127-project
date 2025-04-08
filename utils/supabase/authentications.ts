@@ -116,4 +116,3 @@ export async function updatePassword(formData:FormData) {
   return { success: 'Password updated successfully.' };
 }
 
-
