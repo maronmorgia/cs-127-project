@@ -25,6 +25,20 @@
   --color-secondary-900: oklch(60.93% 0.161171 49.9576);
 }
 
+@layer utilities {
+  .bg-4color-gradient {
+    background-image: linear-gradient(
+      to bottom,
+      theme('colors.primary.900'),
+      theme('colors.primary.300'),
+      theme('colors.secondary.300'),
+      theme('colors.secondary.900')
+    );
+    background-size: 100% 100%;
+  }
+}
+
+
 /* CUSTOM FONT STYLES */
 .display1,
 .display2,
@@ -38,6 +52,10 @@ h6 {
 }
 
 p,
+.large,
+.medium,
+.small,
+.underline,
 blockquote {
   font-family: var(--font-schibsted);
 }
@@ -47,22 +65,25 @@ blockquote {
 }
 
 .display1 {
-  @apply text-7xl font-bold;
+  @apply text-7xl font-bold uppercase;
 }
 .display2 {
-  @apply text-6xl font-bold;
+  @apply text-6xl font-bold uppercase;
+}
+.displayS {
+  @apply text-[44px] font-bold uppercase md:text-[52px];
 }
 h1 {
-  @apply text-5xl font-bold;
+  @apply text-[40px] font-bold;
 }
 h2 {
-  @apply text-3xl font-semibold;
+  @apply text-[32px] font-semibold;
 }
 h3 {
-  @apply text-2xl font-medium;
+  @apply text-[28px] font-semibold;
 }
 h4 {
-  @apply text-xl font-normal;
+  @apply text-2xl font-medium;
 }
 p {
   @apply text-base font-normal;
@@ -74,16 +95,22 @@ blockquote {
   @apply rounded bg-white/10 px-1 py-0.5 text-sm font-bold;
 }
 .lead {
-  @apply text-xl font-semibold;
+  @apply text-xl font-bold;
 }
 .large {
   @apply text-lg font-semibold;
+}
+.medium {
+  @apply text-base font-semibold;
 }
 .small {
   @apply text-sm font-medium;
 }
 .subtle {
-  @apply text-sm font-extralight;
+  @apply text-xs font-light;
+}
+.underline {
+  @apply text-xl underline;
 }
 
 /* DARK MODE */
