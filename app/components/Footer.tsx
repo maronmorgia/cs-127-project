@@ -1,5 +1,6 @@
 import Container from './Container';
 import Logo from './Logo';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -17,14 +18,20 @@ export default function Footer() {
                 <hr className='w-16 border border-white' />
                 <ul className='mt-2 space-y-2'>
                   <li>
-                    <a href='#' className='small text-neutral-50'>
+                    <Link
+                      href='#'
+                      className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
+                    >
                       Home
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href='#' className='small text-neutral-50'>
+                    <Link
+                      href='#'
+                      className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
+                    >
                       Log in
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -34,14 +41,20 @@ export default function Footer() {
                 <hr className='w-14 border border-white' />
                 <ul className='mt-2 w-[74px] space-y-2'>
                   <li>
-                    <a href='#' className='small text-neutral-50'>
+                    <Link
+                      href='#'
+                      className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
+                    >
                       Meet the Developers
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href='#' className='small text-neutral-50'>
+                    <Link
+                      href='#'
+                      className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
+                    >
                       Contact Us
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -51,14 +64,20 @@ export default function Footer() {
                 <hr className='w-20 border border-white' />
                 <ul className='mt-2 space-y-2'>
                   <li>
-                    <a href='#' className='small text-neutral-50'>
+                    <Link
+                      href='#'
+                      className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
+                    >
                       UP Mindanao
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href='#' className='small text-neutral-50'>
+                    <Link
+                      href='#'
+                      className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
+                    >
                       CSM
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
