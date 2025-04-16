@@ -29,7 +29,7 @@ export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath('/');
-  redirect('/login');
+  redirect('/student/login');
 }
 
 export const signWithGoogle = async () => {
