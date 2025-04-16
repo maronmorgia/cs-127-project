@@ -15,8 +15,8 @@ export default async function PrivatePage() {
   if (userRole !== 'superuser') {
     return (
       <>
-        <p>waa</p>
-        <a href='/login'>
+        <p>Not a superuser, not authenticated</p>
+        <a href='/student/login'>
           <button>Go to Login</button>
         </a>
       </>
