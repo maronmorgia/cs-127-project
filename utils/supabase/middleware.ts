@@ -29,41 +29,49 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  // Do not run code between createServerClient and
+  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
+  // issues with users being randomly logged out.
+
+  // IMPORTANT: DO NOT REMOVE auth.getUser()
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const pathname = request.nextUrl.pathname;
-
-  // Allow public access to landing page
-  if (pathname === '/') {
-    return supabaseResponse;
-  }
-
-  // Redirect unauthenticated users trying to go to /admin
+  console.log(request.nextUrl.pathname);
   if (
     !user &&
-    pathname.startsWith('/admin') &&
-    !pathname.startsWith('/admin/login') &&
-    !pathname.startsWith('/auth')
+    request.nextUrl.pathname.startsWith('/admin') &&
+    !request.nextUrl.pathname.startsWith('/admin/login') &&
+    !request.nextUrl.pathname.startsWith('/auth')
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = '/';
-    // return NextResponse.redirect(url);
-  }
-
-  // Redirect unauthenticated users from all other protected pages
-  if (
-    !user &&
-    !pathname.startsWith('/admin') &&
-    pathname.startsWith('/login') &&
-    !pathname.startsWith('/student/login') &&
-    !pathname.startsWith('/auth')
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/student/login';
+    url.pathname = '/admin/login';
     return NextResponse.redirect(url);
   }
+
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith('/admin') &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/auth')
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
+  // IMPORTANT: You *must* return the supabaseResponse object as it is.
+  // If you're creating a new response object with NextResponse.next() make sure to:
+  // 1. Pass the request in it, like so:
+  //    const myNewResponse = NextResponse.next({ request })
+  // 2. Copy over the cookies, like so:
+  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+  // 3. Change the myNewResponse object to fit your needs, but avoid changing
+  //    the cookies!
+  // 4. Finally:
+  //    return myNewResponse
+  // If this is not done, you may be causing the browser and server to go out
+  // of sync and terminate the user's session prematurely!
 
   return supabaseResponse;
 }
