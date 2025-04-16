@@ -58,7 +58,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect unauthenticated users from all other protected pages 
+  // Redirect unauthenticated users from all other protected pages
   if (
     !user &&
     !pathname.startsWith('/admin') &&
