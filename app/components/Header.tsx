@@ -1,8 +1,56 @@
 import Navbar from './Navbar';
 import Container from './Container';
 import Link from 'next/link';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import { RoomCard } from './RoomCard';
+import { useState, useEffect } from 'react';
+import Autoplay from "embla-carousel-autoplay"
+
+const roomData = [
+  {
+    day: "MONDAY",
+    room: "RM 227",
+    time: "1:30-2:30 PM",
+    gradient: "bg-gradient-to-b from-[#294936] via-[#3c755a] to-[#6cb398]",
+  },
+  {
+    day: "TUESDAY",
+    room: "RM 223",
+    time: "7:30-10:30AM",
+    gradient: "bg-gradient-to-b from-[#cc5f00] via-[#d67506] to-[#e7af4e]",
+  },
+  {
+    day: "FRIDAY",
+    room: "RM 115",
+    time: "1:30-2:30 PM",
+    gradient: "bg-gradient-to-b from-slate-900 via-slate-700 to-slate-500",
+  },
+];
 
 export default function Header() {
+  const [api, setApi] = useState<CarouselApi>();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    const onSelect = () => {
+      setActiveIndex(api.selectedScrollSnap());
+    };
+
+    api.on("select", onSelect);
+    onSelect(); 
+
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
   return (
     <header>
       <Navbar />
@@ -30,9 +78,49 @@ export default function Header() {
           </div>
 
           {/* RIGHT SECTION */}
-          <div className='flex w-full items-center justify-end lg:w-1/2'>
-            <div className='bg-4color-gradient flex h-[515px] w-full items-center justify-center rounded-xl p-[2px]'>
-              <div className='h-[510px] w-full rounded-xl bg-neutral-800'></div>
+          <div className="flex w-full items-center justify-end lg:w-1/2">
+            <div className="bg-4color-gradient flex h-[515px] w-full items-center justify-center rounded-xl p-1">
+              <div className="w-full h-[510px] rounded-xl bg-neutral-800 flex items-center justify-center">
+                <Carousel                             
+                  className="w-full max-w-5xl"
+                  opts={{
+                    align: "center",
+                    loop: true,
+                  }}
+                  plugins={[
+                    Autoplay({
+                      delay: 3000,
+                    }),
+                  ]}
+                  setApi={setApi}
+                >
+                  <CarouselContent className="-ml-4">
+                    {roomData.map((room, idx) => (
+                      <CarouselItem
+                        key={idx}
+                        className="pl-4 flex-shrink-0"
+                      >
+                        <div className="flex items-center justify-center h-[480px]">
+                          <RoomCard {...room}/>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+
+                  {/* Dots */}
+                  <div className="flex justify-center gap-2 mt-4 pb-5">
+                    {roomData.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => api?.scrollTo(idx)}
+                        className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                          activeIndex === idx ? "bg-secondary-900" : "bg-white"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </Carousel>
+              </div>
             </div>
           </div>
         </section>
