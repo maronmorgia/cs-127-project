@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -37,7 +37,7 @@
 }
 
 body {
-  @apply text-neutral-50
+  @apply text-neutral-50;
 }
 
 /* CUSTOM FONT STYLES */

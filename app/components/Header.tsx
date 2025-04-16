@@ -6,29 +6,29 @@ import {
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "@/components/ui/carousel";
+} from '@/components/ui/carousel';
 import { RoomCard } from './RoomCard';
 import { useState, useEffect } from 'react';
-import Autoplay from "embla-carousel-autoplay"
+import Autoplay from 'embla-carousel-autoplay';
 
 const roomData = [
   {
-    day: "MONDAY",
-    room: "RM 227",
-    time: "1:30-2:30 PM",
-    gradient: "bg-gradient-to-b from-[#294936] via-[#3c755a] to-[#6cb398]",
+    day: 'MONDAY',
+    room: 'RM 227',
+    time: '1:30-2:30 PM',
+    gradient: 'bg-gradient-to-b from-[#294936] via-[#3c755a] to-[#6cb398]',
   },
   {
-    day: "TUESDAY",
-    room: "RM 223",
-    time: "7:30-10:30AM",
-    gradient: "bg-gradient-to-b from-[#cc5f00] via-[#d67506] to-[#e7af4e]",
+    day: 'TUESDAY',
+    room: 'RM 223',
+    time: '7:30-10:30AM',
+    gradient: 'bg-gradient-to-b from-[#cc5f00] via-[#d67506] to-[#e7af4e]',
   },
   {
-    day: "FRIDAY",
-    room: "RM 115",
-    time: "1:30-2:30 PM",
-    gradient: "bg-gradient-to-b from-slate-900 via-slate-700 to-slate-500",
+    day: 'FRIDAY',
+    room: 'RM 115',
+    time: '1:30-2:30 PM',
+    gradient: 'bg-gradient-to-b from-slate-900 via-slate-700 to-slate-500',
   },
 ];
 
@@ -43,11 +43,11 @@ export default function Header() {
       setActiveIndex(api.selectedScrollSnap());
     };
 
-    api.on("select", onSelect);
-    onSelect(); 
+    api.on('select', onSelect);
+    onSelect();
 
     return () => {
-      api.off("select", onSelect);
+      api.off('select', onSelect);
     };
   }, [api]);
 
@@ -78,13 +78,13 @@ export default function Header() {
           </div>
 
           {/* RIGHT SECTION */}
-          <div className="flex w-full items-center justify-end lg:w-1/2">
-            <div className="bg-4color-gradient flex h-[515px] w-full items-center justify-center rounded-xl p-1">
-              <div className="w-full h-[510px] rounded-xl bg-neutral-800 flex items-center justify-center">
-                <Carousel                             
-                  className="w-full max-w-5xl"
+          <div className='flex w-full items-center justify-end lg:w-1/2'>
+            <div className='bg-4color-gradient flex h-[515px] w-full items-center justify-center rounded-xl p-1'>
+              <div className='flex h-[510px] w-full items-center justify-center rounded-xl bg-neutral-800'>
+                <Carousel
+                  className='w-full max-w-5xl'
                   opts={{
-                    align: "center",
+                    align: 'center',
                     loop: true,
                   }}
                   plugins={[
@@ -94,27 +94,24 @@ export default function Header() {
                   ]}
                   setApi={setApi}
                 >
-                  <CarouselContent className="-ml-4">
+                  <CarouselContent className='-ml-4'>
                     {roomData.map((room, idx) => (
-                      <CarouselItem
-                        key={idx}
-                        className="pl-4 flex-shrink-0"
-                      >
-                        <div className="flex items-center justify-center h-[480px]">
-                          <RoomCard {...room}/>
+                      <CarouselItem key={idx} className='flex-shrink-0 pl-4'>
+                        <div className='flex h-[480px] items-center justify-center'>
+                          <RoomCard {...room} />
                         </div>
                       </CarouselItem>
                     ))}
                   </CarouselContent>
 
                   {/* Dots */}
-                  <div className="flex justify-center gap-2 mt-4 pb-5">
+                  <div className='mt-4 flex justify-center gap-2 pb-5'>
                     {roomData.map((_, idx) => (
                       <button
                         key={idx}
                         onClick={() => api?.scrollTo(idx)}
-                        className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                          activeIndex === idx ? "bg-secondary-900" : "bg-white"
+                        className={`h-3 w-3 rounded-full transition-colors duration-300 ${
+                          activeIndex === idx ? 'bg-secondary-900' : 'bg-white'
                         }`}
                       />
                     ))}
