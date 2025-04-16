@@ -61,12 +61,12 @@ export async function updateSession(request: NextRequest) {
   // Redirect unauthenticated users from all other protected pages
   if (
     !user &&
-    !pathname.startsWith('/admin') &&
-    !pathname.startsWith('/login') &&
-    !pathname.startsWith('/auth')
+    !request.nextUrl.pathname.startsWith('/admin') &&
+    !request.nextUrl.pathname.startsWith('/student/login') &&
+    !request.nextUrl.pathname.startsWith('/auth')
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    url.pathname = '/student/login';
     return NextResponse.redirect(url);
   }
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
