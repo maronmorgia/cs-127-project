@@ -89,7 +89,7 @@ export default function Header() {
                   }}
                   plugins={[
                     Autoplay({
-                      delay: 3000,
+                      delay: 4000,
                     }),
                   ]}
                   setApi={setApi}
