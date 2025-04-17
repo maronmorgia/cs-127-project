@@ -38,26 +38,36 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log(request.nextUrl.pathname);
+
+  const pathname = request.nextUrl.pathname;
+
+  // Allow public access to landing page
+  if (pathname === '/') {
+    return supabaseResponse;
+  }
+
+  // Redirect unauthenticated users trying to go to /admin
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/admin') &&
-    !request.nextUrl.pathname.startsWith('/admin/login') &&
-    !request.nextUrl.pathname.startsWith('/auth')
+    pathname.startsWith('/admin') &&
+    !pathname.startsWith('/admin/login') &&
+    !pathname.startsWith('/auth')
   ) {
     const url = request.nextUrl.clone();
     url.pathname = '/admin/login';
     return NextResponse.redirect(url);
   }
 
+  // Redirect unauthenticated users from all other protected pages
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith('/admin') &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/auth')
+    !pathname.startsWith('/admin') &&
+    pathname.startsWith('/login') &&
+    !pathname.startsWith('/student/login') &&
+    !pathname.startsWith('/auth')
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    url.pathname = '/student/login';
     return NextResponse.redirect(url);
   }
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
