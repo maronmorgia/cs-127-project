@@ -27,7 +27,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      href='#'
+                      href='/login'
                       className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
                     >
                       Log in
@@ -65,7 +65,7 @@ export default function Footer() {
                 <ul className='mt-2 space-y-2'>
                   <li>
                     <Link
-                      href='#'
+                      href='https://www.upmin.edu.ph/'
                       className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
                     >
                       UP Mindanao
@@ -73,7 +73,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      href='#'
+                      href='https://www.facebook.com/csmupmin/?locale=tl_PH'
                       className='small inline-block text-neutral-50 transition-all duration-300 ease-in-out hover:scale-115 hover:text-white'
                     >
                       CSM

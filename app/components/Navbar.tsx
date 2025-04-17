@@ -9,7 +9,7 @@ const Navbar = () => {
       <nav>
         <ul className='flex items-center justify-end gap-8'>
           <li>
-            <Link href=''>
+            <Link href='#'>
               <img
                 src='/info.svg'
                 alt='Info icon'
@@ -22,6 +22,7 @@ const Navbar = () => {
           </li>
 
           <li>
+            <Link href='/login'>
             <img
               src='/log-in.svg'
               alt='Log-in icon'
@@ -30,6 +31,7 @@ const Navbar = () => {
             <button className='hover:bg-secondary-500 bg-secondary-900 lead hidden h-14 w-[146px] cursor-pointer items-center justify-center rounded-md px-4 py-2 leading-7 text-neutral-50 transition-all duration-300 hover:w-[154px] hover:underline lg:flex'>
               Log in
             </button>
+            </Link>
           </li>
         </ul>
       </nav>
