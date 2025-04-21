@@ -144,7 +144,7 @@ blockquote {
   @apply text-sm font-medium;
 }
 .subtle {
-  @apply text-[8px] font-light;
+  @apply text-[14px] font-light;
 }
 .underline {
   @apply text-xl underline;
