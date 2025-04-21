@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { logout } from '@/utils/supabase/authentications';
+import ChangePassword from '../components/ChangePasswordForm';
 
 export default async function PrivatePage() {
   const supabase = await createClient();
@@ -28,14 +28,7 @@ export default async function PrivatePage() {
       <p>
         Hello {data.user.email}, Role: {userRole}
       </p>
-      <div className='space-x-4'>
-        <form action={logout}>
-          <button type='submit'>Logout</button>
-        </form>
-        <a href='/admin/reset-password'>
-          <button>Change password</button>
-        </a>
-      </div>
+      <ChangePassword />
     </>
   );
 }
