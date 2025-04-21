@@ -24,6 +24,24 @@
 }
 
 @layer utilities {
+  .bg-gradient-orange {
+    background:
+      radial-gradient(
+        95.75% 70.6% at 50% 50%,
+        rgba(23, 23, 23, 0.2) 0%,
+        rgba(23, 23, 23, 0) 100%
+      ),
+      radial-gradient(
+        95.97% 70.71% at 50% 50%,
+        #cc5f00 0%,
+        rgba(204, 95, 0, 0) 100%
+      ),
+      radial-gradient(
+        95.97% 70.71% at 50% 50%,
+        #e7af4e 0%,
+        rgba(231, 175, 78, 0) 100%
+      );
+  }
   .bg-4color-gradient {
     background-image: linear-gradient(
       to bottom,
