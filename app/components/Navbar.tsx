@@ -22,7 +22,7 @@ const Navbar = () => {
           </li>
 
           <li>
-            <Link href='/login'>
+            <Link href='/student\login'>
               <img
                 src='/log-in.svg'
                 alt='Log-in icon'
