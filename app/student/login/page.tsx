@@ -14,12 +14,18 @@ const LoginPage = () => {
     type: 'success' | 'error';
   } | null>(null);
 
+  // Add a loading state
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleGoogleLogin = async () => {
     try {
-      await signWithGoogle();
+      setIsLoading(true); // Set loading to true when login starts
+      await signWithGoogle(); // Trigger google sign in process
       setToast({ message: 'Login Successful!', type: 'success' });
+      // Spinner will not stop since the redirect will stop it after successfull login
     } catch (error) {
       setToast({ message: 'Login Failed! Please try again.', type: 'error' });
+      setIsLoading(false); // Stop the spinner immediately on failure for user to try again
     }
   };
 
@@ -40,6 +46,7 @@ const LoginPage = () => {
               onClick={handleGoogleLogin}
               className='bg-secondary-900 small hover:bg-secondary-500 flex items-center justify-center gap-2 rounded-md px-4 py-2 transition'
               aria-label='Login with Google'
+              disabled={isLoading}
             >
               <Mail className='size-5' />
               Login with Google
@@ -55,12 +62,20 @@ const LoginPage = () => {
         </div>
       </main>
 
+      {/* Toast Notification */}
       {toast && (
         <ToastNotification
           message={toast.message}
           type={toast.type}
           onClose={() => setToast(null)}
         />
+      )}
+
+      {/* Full-screen loading overlay */}
+      {isLoading && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-neutral-800/60'>
+          <div className='border-secondary-700 h-16 w-16 animate-spin rounded-full border-4 border-t-4 border-t-transparent'></div>
+        </div>
       )}
     </Container>
   );
