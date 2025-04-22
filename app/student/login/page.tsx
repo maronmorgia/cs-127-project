@@ -27,7 +27,7 @@ const LoginPage = () => {
       console.error('Login failed:', error);
       setToast({ message: 'Login Failed! Please try again.', type: 'error' });
       setIsLoading(false); // Stop the spinner immediately on failure for user to try again
-    }    
+    }
   };
 
   return (
