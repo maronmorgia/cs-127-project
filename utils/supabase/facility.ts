@@ -65,7 +65,6 @@ export async function updateFacility(id: number, formData: FormData) {
       roomname,
       capacity,
       schedule: schedule || null,
-      updated_at: new Date().toISOString(),
     })
     .eq('id', id)
     .select();
