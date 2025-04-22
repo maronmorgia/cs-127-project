@@ -6,7 +6,11 @@ export async function createFacility(formData: FormData) {
   const supabase = await createClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData?.user || userData.user.user_metadata?.role !== 'superuser') {
+  if (
+    userError ||
+    !userData?.user ||
+    userData.user.user_metadata?.role !== 'superuser'
+  ) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
@@ -50,7 +54,11 @@ export async function updateFacility(id: number, formData: FormData) {
   const supabase = await createClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData?.user || userData.user.user_metadata?.role !== 'superuser') {
+  if (
+    userError ||
+    !userData?.user ||
+    userData.user.user_metadata?.role !== 'superuser'
+  ) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
@@ -78,14 +86,15 @@ export async function deleteFacility(id: number) {
   const supabase = await createClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData?.user || userData.user.user_metadata?.role !== 'superuser') {
+  if (
+    userError ||
+    !userData?.user ||
+    userData.user.user_metadata?.role !== 'superuser'
+  ) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
-  const { error } = await supabase
-  .from('facilities')
-  .delete()
-  .eq('id', id);
+  const { error } = await supabase.from('facilities').delete().eq('id', id);
 
   if (error) {
     console.error('Error deleting facility:', error);
