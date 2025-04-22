@@ -6,22 +6,30 @@ import {
   updateFacility,
   deleteFacility,
 } from '@/utils/supabase/facility';
-import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+type Facility = {
+  id: number;
+  type: string;
+  roomname: string;
+  capacity: number;
+  schedule?: string;
+};
+
 export default function CreateFacilityPage() {
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [facilities, setFacilities] = useState<any[]>([]);
+  const [facilities, setFacilities] = useState<Facility[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const [filter, setFilter] = useState<string>('all');
   const [searchId, setSearchId] = useState<string>('');
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<{ [key: number]: any }>({});
+  const [editForm, setEditForm] = useState<{
+    [key: number]: Partial<Facility>;
+  }>({});
 
   useEffect(() => {
     const fetchFacilities = async () => {
@@ -59,7 +67,11 @@ export default function CreateFacilityPage() {
     }
   };
 
-  const handleEditChange = (id: number, field: string, value: any) => {
+  const handleEditChange = (
+    id: number,
+    field: keyof Facility,
+    value: string | number
+  ) => {
     setEditForm((prev) => ({
       ...prev,
       [id]: {
@@ -72,10 +84,10 @@ export default function CreateFacilityPage() {
   const handleUpdate = async (id: number) => {
     const form = new FormData();
     const currentEdit = editForm[id];
-    form.append('type', currentEdit.type);
-    form.append('roomname', currentEdit.roomname);
-    form.append('capacity', currentEdit.capacity);
-    form.append('schedule', currentEdit.schedule || '');
+    form.append('type', String(currentEdit.type));
+    form.append('roomname', String(currentEdit.roomname));
+    form.append('capacity', String(currentEdit.capacity));
+    form.append('schedule', String(currentEdit.schedule ?? ''));
     await updateFacility(id, form);
     const data = await readFacilities();
     setFacilities(data);
@@ -118,7 +130,7 @@ export default function CreateFacilityPage() {
             id='type'
             name='type'
             required
-            className='mt-1 block w-full rounded-md border border-gray-300 p-2 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500'
+            className='mt-1 block w-full rounded-md border border-gray-300 p-2 text-black shadow-sm'
           >
             <option value=''>Select a type</option>
             <option value='classroom'>Classroom</option>
@@ -277,7 +289,7 @@ export default function CreateFacilityPage() {
                         handleEditChange(
                           facility.id,
                           'capacity',
-                          e.target.value
+                          Number(e.target.value)
                         )
                       }
                       className='mb-2 block w-full rounded-md border p-2'
