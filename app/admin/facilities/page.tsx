@@ -1,6 +1,6 @@
 'use client';
 
-import { createFacility, readFacilities } from '@/utils/supabase/facility';
+import { createFacility, readFacilities, updateFacility } from '@/utils/supabase/facility';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -15,6 +15,8 @@ export default function CreateFacilityPage() {
 
   const [filter, setFilter] = useState<string>('all');
   const [searchId, setSearchId] = useState<string>('');
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editValues, setEditValues] = useState<{ [key: number]: any }>({});
 
   useEffect(() => {
     const fetchFacilities = async () => {
@@ -39,7 +41,8 @@ export default function CreateFacilityPage() {
     try {
       const formData = new FormData(event.currentTarget);
       await createFacility(formData);
-      router.refresh();
+      const updated = await readFacilities();
+      setFacilities(updated);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create facility');
     } finally {
@@ -47,7 +50,53 @@ export default function CreateFacilityPage() {
     }
   };
 
-  const filteredFacilities = facilities.filter(facility => {
+  const toggleEdit = (id: number) => {
+    if (editId === id) {
+      setEditId(null);
+    } else {
+      setEditId(id);
+      const facility = facilities.find((f) => f.id === id);
+      setEditValues((prev) => ({
+        ...prev,
+        [id]: {
+          roomname: facility.roomname,
+          type: facility.type,
+          capacity: facility.capacity,
+          schedule: facility.schedule || '',
+        },
+      }));
+    }
+  };
+
+  const handleEditChange = (id: number, field: string, value: string | number) => {
+    setEditValues((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleUpdate = async (id: number) => {
+    try {
+      const values = editValues[id];
+      const formData = new FormData();
+      formData.append('roomname', values.roomname);
+      formData.append('type', values.type);
+      formData.append('capacity', values.capacity.toString());
+      formData.append('schedule', values.schedule);
+
+      await updateFacility(id, formData);
+      const updated = await readFacilities();
+      setFacilities(updated);
+      setEditId(null);
+    } catch {
+      alert('Failed to update facility');
+    }
+  };
+
+  const filteredFacilities = facilities.filter((facility) => {
     const matchType = filter === 'all' || facility.type === filter;
     const matchId = searchId === '' || facility.id?.toString() === searchId;
     return matchType && matchId;
@@ -56,7 +105,7 @@ export default function CreateFacilityPage() {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md text-black">
       <h1 className="text-2xl font-bold mb-6 text-black">Create New Facility</h1>
-      
+
       {error && (
         <div className="mb-4 p-4 bg-red-100 text-black rounded">
           {error}
@@ -77,7 +126,7 @@ export default function CreateFacilityPage() {
             <option value="">Select a type</option>
             <option value="classroom">Classroom</option>
             <option value="laboratory">Laboratory</option>
-            <option value="meeting-room">meeting-room</option>
+            <option value="meeting-room">Meeting Room</option>
           </select>
         </div>
 
@@ -177,11 +226,65 @@ export default function CreateFacilityPage() {
           <div className="grid gap-4">
             {filteredFacilities.map((facility) => (
               <div key={facility.id} className="p-4 bg-gray-50 rounded shadow text-black">
-                <h3 className="text-lg font-medium text-black">{facility.roomname}</h3>
-                <p>ID: {facility.id}</p>
-                <p>Type: {facility.type}</p>
-                <p>Capacity: {facility.capacity}</p>
-                <p>Schedule: {facility.schedule || 'N/A'}</p>
+                {editId === facility.id ? (
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      value={editValues[facility.id]?.roomname || ''}
+                      onChange={(e) => handleEditChange(facility.id, 'roomname', e.target.value)}
+                      className="w-full p-2 border rounded text-black"
+                    />
+                    <select
+                      value={editValues[facility.id]?.type || ''}
+                      onChange={(e) => handleEditChange(facility.id, 'type', e.target.value)}
+                      className="w-full p-2 border rounded text-black"
+                    >
+                      <option value="classroom">Classroom</option>
+                      <option value="laboratory">Laboratory</option>
+                      <option value="meeting-room">Meeting Room</option>
+                    </select>
+                    <input
+                      type="number"
+                      value={editValues[facility.id]?.capacity || ''}
+                      onChange={(e) => handleEditChange(facility.id, 'capacity', parseInt(e.target.value))}
+                      className="w-full p-2 border rounded text-black"
+                    />
+                    <input
+                      type="text"
+                      value={editValues[facility.id]?.schedule || ''}
+                      onChange={(e) => handleEditChange(facility.id, 'schedule', e.target.value)}
+                      className="w-full p-2 border rounded text-black"
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={() => handleUpdate(facility.id)}
+                        className="px-4 py-1 bg-blue-500 text-white rounded"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => toggleEdit(facility.id)}
+                        className="px-4 py-1 bg-gray-300 text-black rounded"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-lg font-medium text-black">{facility.roomname}</h3>
+                    <p>ID: {facility.id}</p>
+                    <p>Type: {facility.type}</p>
+                    <p>Capacity: {facility.capacity}</p>
+                    <p>Schedule: {facility.schedule || 'N/A'}</p>
+                    <button
+                      onClick={() => toggleEdit(facility.id)}
+                      className="mt-2 text-sm text-blue-600 underline"
+                    >
+                      Edit
+                    </button>
+                  </>
+                )}
               </div>
             ))}
           </div>
