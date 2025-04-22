@@ -5,23 +5,19 @@ import { createClient } from './server';
 export async function createFacility(formData: FormData) {
   const supabase = await createClient();
 
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData?.user || userData.user.user_metadata?.role !== 'superuser') {
+    throw new Error('Unauthorized: Only superusers can perform this action');
+  }
+
   const type = formData.get('type') as string;
   const roomname = formData.get('roomname') as string;
   const capacity = Number(formData.get('capacity'));
   const schedule = formData.get('schedule') as string;
 
-  console.log('Form data received:', { type, roomname, capacity, schedule });
-
   const { data, error } = await supabase
     .from('facilities')
-    .insert([
-      {
-        type,
-        roomname,
-        capacity,
-        schedule: schedule || null,
-      },
-    ])
+    .insert([{ type, roomname, capacity, schedule: schedule || null }])
     .select();
 
   if (error) {
@@ -53,6 +49,11 @@ export async function readFacilities() {
 export async function updateFacility(id: number, formData: FormData) {
   const supabase = await createClient();
 
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData?.user || userData.user.user_metadata?.role !== 'superuser') {
+    throw new Error('Unauthorized: Only superusers can perform this action');
+  }
+
   const type = formData.get('type') as string;
   const roomname = formData.get('roomname') as string;
   const capacity = Number(formData.get('capacity'));
@@ -60,12 +61,7 @@ export async function updateFacility(id: number, formData: FormData) {
 
   const { data, error } = await supabase
     .from('facilities')
-    .update({
-      type,
-      roomname,
-      capacity,
-      schedule: schedule || null,
-    })
+    .update({ type, roomname, capacity, schedule: schedule || null })
     .eq('id', id)
     .select();
 
@@ -81,10 +77,15 @@ export async function updateFacility(id: number, formData: FormData) {
 export async function deleteFacility(id: number) {
   const supabase = await createClient();
 
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData?.user || userData.user.user_metadata?.role !== 'superuser') {
+    throw new Error('Unauthorized: Only superusers can perform this action');
+  }
+
   const { error } = await supabase
-    .from('facilities')
-    .delete()
-    .eq('id', id);
+  .from('facilities')
+  .delete()
+  .eq('id', id);
 
   if (error) {
     console.error('Error deleting facility:', error);
