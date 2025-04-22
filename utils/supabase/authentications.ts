@@ -8,8 +8,6 @@ import { createClient } from './server';
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
@@ -18,11 +16,28 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    redirect('/error');
+    return {
+      error:
+        error.message.includes('Invalid login credentials') || error.message.includes('Invalid login')
+          ? 'Incorrect email or password'
+          : error.message,
+    };
   }
 
   revalidatePath('/admin/', 'layout');
   redirect('/admin/');
+}
+
+export async function loginWithFormState(_: { error: string } | undefined, formData: FormData) {
+  const result = await login(formData);
+  return result || { error: '' };
+}
+
+export async function loginAction(
+  prevState: { error: string } | undefined,
+  formData: FormData
+) {
+  return await login(formData); 
 }
 
 export async function logout() {
