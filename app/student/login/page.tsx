@@ -24,9 +24,10 @@ const LoginPage = () => {
       setToast({ message: 'Login Successful!', type: 'success' });
       // Spinner will not stop since the redirect will stop it after successfull login
     } catch (error) {
+      console.error('Login failed:', error);
       setToast({ message: 'Login Failed! Please try again.', type: 'error' });
       setIsLoading(false); // Stop the spinner immediately on failure for user to try again
-    }
+    }    
   };
 
   return (
