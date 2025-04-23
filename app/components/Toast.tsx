@@ -20,7 +20,7 @@ const ToastNotification: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`small fixed bottom-5 left-1/2 z-1000 w-auto -translate-x-1/2 transform rounded-lg px-5 py-4 shadow-md transition-opacity ${
+      className={`text-center small fixed bottom-7 left-1/2 z-1000 w-auto -translate-x-1/2 transform rounded-lg px-4 py-4 shadow-md transition-opacity ${
         type === 'success' ? 'bg-radial-gradient' : 'bg-gradient-orange'
       }`}
     >

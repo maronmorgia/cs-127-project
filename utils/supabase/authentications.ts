@@ -24,8 +24,7 @@ export async function login(formData: FormData) {
     };
   }
 
-  revalidatePath('/admin/', 'layout');
-  redirect('/admin/');
+  return { error: '' };
 }
 
 export async function loginWithFormState(_: { error: string } | undefined, formData: FormData) {
