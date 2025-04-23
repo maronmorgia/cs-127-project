@@ -18,7 +18,8 @@ export async function login(formData: FormData) {
   if (error) {
     return {
       error:
-        error.message.includes('Invalid login credentials') || error.message.includes('Invalid login')
+        error.message.includes('Invalid login credentials') ||
+        error.message.includes('Invalid login')
           ? 'Incorrect email or password'
           : error.message,
     };
@@ -27,7 +28,10 @@ export async function login(formData: FormData) {
   return { error: '' };
 }
 
-export async function loginWithFormState(_: { error: string } | undefined, formData: FormData) {
+export async function loginWithFormState(
+  _: { error: string } | undefined,
+  formData: FormData
+) {
   const result = await login(formData);
   return result || { error: '' };
 }
@@ -36,7 +40,7 @@ export async function loginAction(
   prevState: { error: string } | undefined,
   formData: FormData
 ) {
-  return await login(formData); 
+  return await login(formData);
 }
 
 export async function logout() {
