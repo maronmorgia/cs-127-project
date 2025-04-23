@@ -112,7 +112,7 @@ export default function ChangePassword() {
                   </h2>
                   <p className='subtle text-sm text-neutral-500'>
                     Make changes to your password here. Type your new password,
-                    confirm it, and click change password when you're done.
+                    confirm it, and click change password when youre done.
                   </p>
                 </header>
               </div>
