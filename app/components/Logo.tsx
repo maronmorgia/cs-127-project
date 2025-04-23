@@ -1,9 +1,16 @@
+import Image from 'next/image';
+
 const Logo = () => {
   return (
-    <div>
-      <button className='hover:bg-primary-700 flex w-[98px] justify-center rounded-md bg-neutral-700 py-[8px]'>
-        Logo
-      </button>
+    <div className='flex items-center gap-2'>
+      <Image
+        src='/Takda_Logo.png'
+        alt='Takda Logo'
+        width={44}
+        height={44}
+        className='object-contain'
+      />
+      <h3 className='leading-7'>TAKDA</h3>
     </div>
   );
 };
