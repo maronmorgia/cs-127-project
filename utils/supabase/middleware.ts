@@ -34,7 +34,6 @@ export async function updateSession(request: NextRequest) {
   // issues with users being randomly logged out.
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -58,6 +57,18 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Redirect authenticated users without 'superuser' role from /admin
+  if (
+    user &&
+    pathname.startsWith('/admin') &&
+    !pathname.startsWith('/admin/login') &&
+    user.user_metadata?.role !== 'superuser'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/admin/login';
+    return NextResponse.redirect(url);
+  }
+
   // Redirect unauthenticated users from all other protected pages
   if (
     !user &&
@@ -70,6 +81,7 @@ export async function updateSession(request: NextRequest) {
     url.pathname = '/student/login';
     return NextResponse.redirect(url);
   }
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
