@@ -2,13 +2,48 @@
 
 import { useState } from 'react';
 import { useActionState } from 'react';
+import { useRouter } from 'next/navigation';
 import { loginAction } from '@/utils/supabase/authentications';
 import Container from '@/app/components/Container';
+import ToastNotification from '@/app/components/Toast';
 import { User, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [state, formAction] = useActionState(loginAction, { error: '' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
+
+  const router = useRouter();
+
+  const [state, formAction] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      setIsLoading(true);
+      const result = await loginAction(prevState, formData);
+
+      if (result?.error) {
+        setToast({
+          message: result.error === 'Incorrect email or password' 
+            ? 'Incorrect email or password.'
+            : 'Login failed. Please try again later.',
+          type: 'error',
+        });
+        setIsLoading(false);
+        return { error: '' }; // Clear form-level error
+      } else {
+        setToast({ message: 'Login Successful!', type: 'success' });
+
+        // Delay the redirection to give time for the "Loading..." text to persist
+        setTimeout(() => {
+          router.push('/admin/');
+        }, 1000); // Wait for 1 second before redirecting
+        return { error: '' };
+      }
+    },
+    { error: '' }
+  );
 
   return (
     <Container className="bg-neutral-800 min-h-screen flex items-center justify-center">
@@ -36,7 +71,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password Field with toggle */}
+            {/* Password Field */}
             <div className="relative flex items-center w-full bg-neutral-50 text-sm text-black rounded-md border-2 border-neutral-800 overflow-hidden">
               <div className="pl-3 flex items-center">
                 <Lock className="size-[18px] text-neutral-800" />
@@ -63,21 +98,26 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="small bg-primary-900 rounded-md px-4 py-2 hover:bg-primary-700 transition"
+            disabled={isLoading}
+            className="small bg-primary-900 rounded-md px-4 py-2 hover:bg-primary-700 transition flex items-center justify-center gap-2"
           >
-            Log in
+            {isLoading ? (
+              'Loading...'
+            ) : (
+              'Log in'
+            )}
           </button>
         </form>
-
-        {/* Error Message */}
-        {state?.error && (
-          <div className="w-full pt-10 flex justify-center">
-            <p className="bg-red-700 text-white rounded-lg small p-2 text-center shadow-lg border-2 border-red-700">
-              {state.error}
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <ToastNotification
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </Container>
   );
 }
