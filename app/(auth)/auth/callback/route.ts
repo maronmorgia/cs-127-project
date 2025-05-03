@@ -18,7 +18,9 @@ export async function GET(request: Request) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
         return NextResponse.redirect(`${origin}${next}/student/faculty`);
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}/student/faculty`);
+        return NextResponse.redirect(
+          `https://${forwardedHost}${next}/student/faculty`
+        );
       } else {
         return NextResponse.redirect(`${origin}${next}/student/faculty`);
       }

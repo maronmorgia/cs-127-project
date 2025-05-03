@@ -87,10 +87,7 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
-  if (
-    user &&
-    pathname.startsWith('/student/login')
-  ) {
+  if (user && pathname.startsWith('/student/login')) {
     const url = request.nextUrl.clone();
     url.pathname = '/student/faculty';
     return NextResponse.redirect(url);
