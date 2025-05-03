@@ -69,6 +69,33 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  if (
+    user &&
+    pathname.startsWith('/admin/login') &&
+    user.user_metadata?.role === 'superuser'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/admin/';
+    return NextResponse.redirect(url);
+  }
+
+  if (
+    user &&
+    pathname.startsWith('/student/login') &&
+    user.user_metadata?.role === 'superuser'
+  ) {
+    return supabaseResponse;
+  }
+
+  if (
+    user &&
+    pathname.startsWith('/student/login')
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/student/faculty';
+    return NextResponse.redirect(url);
+  }
+
   // Redirect unauthenticated users from all other protected pages
   if (
     !user &&
