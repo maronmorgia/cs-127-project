@@ -1,22 +1,74 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu } from 'lucide-react';
+import { Menu, LogOut, User, X } from 'lucide-react';
 import Sidebar from './Sidebar';
+import { createClient } from '@/utils/supabase/client';
+import Image from 'next/image';
+import { logout } from '@/utils/supabase/authentications';
 
 const Navbar = () => {
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith('/admin/facilities');
+  const isAdmin = pathname.startsWith('/admin');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    const fetchUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser(data.user);
+      }
+    };
+
+    fetchUser();
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const isAdminUser = isAdmin && user;
+
+  const getInitials = () => {
+    if (!user) return '?';
+
+    // For admin users: Always return 'A' for initials
+    if (isAdminUser) {
+      return 'A';
+    }
+
+    // For non-admin (OAuth) users: Get the initials from the full name
+    const fullName = user.user_metadata?.full_name || user.email || '';
+    return fullName
+      .split(' ')
+      .map((word: string) => word[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  const avatarSrc = !isAdminUser ? user?.user_metadata?.avatar_url : null;
 
   return (
     <header className='relative flex h-[72px] w-full shrink-0 items-center px-7 md:px-15'>
       {isAdmin ? (
         <>
-          {/* Admin Navbar */}
           <nav className='flex w-full items-center justify-between'>
             <button
               aria-label='Sidebar toggle'
@@ -30,17 +82,114 @@ const Navbar = () => {
               <Logo variant='icon' />
             </div>
 
-            <div
-              aria-label='User avatar'
-              className='inline-flex h-[72px] flex-col items-center justify-center overflow-hidden rounded-md'
-            >
-              <div className='relative h-10 w-10' data-type='avatar initials'>
-                <div className='absolute h-10 w-10 rounded-full bg-[#294936]'></div>
-              </div>
+            <div ref={dropdownRef} className='relative'>
+              <button
+                id='user-menu-button'
+                aria-haspopup='true'
+                aria-expanded={dropdownOpen}
+                aria-controls='user-dropdown'
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className='relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full text-base font-normal focus:ring-2 focus:ring-neutral-400 focus:outline-none'
+                style={{ fontFamily: 'var(--font-schibsted)' }}
+              >
+                {avatarSrc ? (
+                  <Image
+                    src={avatarSrc}
+                    alt='User avatar'
+                    fill
+                    className='rounded-full object-cover'
+                  />
+                ) : (
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-full ${
+                      isAdminUser ? 'bg-primary-900' : 'bg-secondary-900'
+                    }`}
+                  >
+                    {getInitials()}
+                  </div>
+                )}
+              </button>
+
+              {dropdownOpen && (
+                <section
+                  id='user-dropdown'
+                  role='menu'
+                  aria-labelledby='user-menu-button'
+                  className='absolute top-14 right-0 z-50 w-56 rounded-md border border-neutral-900 bg-white text-sm shadow-lg focus:outline-none'
+                >
+                  <header
+                    className='flex h-[72px] items-center justify-between gap-[10px] px-3'
+                    role='presentation'
+                  >
+                    <div className='flex items-center gap-3'>
+                      {avatarSrc ? (
+                        <Image
+                          src={avatarSrc}
+                          alt='User avatar'
+                          width={40}
+                          height={40}
+                          className='rounded-full object-cover'
+                        />
+                      ) : (
+                        <div
+                          className={`flex h-10 w-10 items-center justify-center rounded-full text-base font-normal ${
+                            isAdminUser ? 'bg-primary-900' : 'bg-secondary-900'
+                          }`}
+                          style={{ fontFamily: 'var(--font-schibsted)' }}
+                        >
+                          {getInitials()}
+                        </div>
+                      )}
+                      <div className='flex flex-col'>
+                        <span className='subtle-medium text-neutral-800'>
+                          {isAdminUser
+                            ? user?.email?.split('@')[0]
+                            : user?.user_metadata?.full_name || user?.email}
+                        </span>
+                        {isAdminUser && (
+                          <span className='subtle font-bold text-neutral-800'>
+                            Admin
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setDropdownOpen(false)}
+                      aria-label='Close menu'
+                      className='rounded p-1 focus:ring-2 focus:ring-black focus:ring-offset-2 focus:outline-none'
+                    >
+                      <X className='text-neutral-900' />
+                    </button>
+                  </header>
+
+                  <hr className='absolute left-0 w-full border-black' />
+
+                  <ul className='px-3 py-2' role='none'>
+                    <li role='menuitem'>
+                      <Link
+                        href='/admin/profile'
+                        className='flex w-full items-center gap-2 py-[6px] text-left text-neutral-900 hover:bg-neutral-400'
+                      >
+                        <User className='size-4' />
+                        Account
+                      </Link>
+                    </li>
+                    <li role='menuitem'>
+                      <button
+                        onClick={logout}
+                        className='flex w-full items-center gap-2 py-[6px] text-red-600 hover:bg-neutral-400'
+                      >
+                        <LogOut className='size-4' />
+                        Log out
+                      </button>
+                    </li>
+                  </ul>
+                </section>
+              )}
             </div>
           </nav>
-          <hr className='absolute left-0 mt-[72px] w-full border-b border-neutral-400'></hr>
 
+          <hr className='absolute left-0 mt-[72px] w-full border-b border-neutral-400'></hr>
           <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         </>
       ) : (
