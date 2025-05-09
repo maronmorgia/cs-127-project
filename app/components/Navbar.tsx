@@ -4,17 +4,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, LogOut, User, X } from 'lucide-react';
+import { Menu, LogOut, User as UserIcon, X } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { createClient } from '@/utils/supabase/client';
 import Image from 'next/image';
 import { logout } from '@/utils/supabase/authentications';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 const Navbar = () => {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -48,13 +49,12 @@ const Navbar = () => {
   const getInitials = () => {
     if (!user) return '?';
 
-    // For admin users: Always return 'A' for initials
     if (isAdminUser) {
       return 'A';
     }
 
-    // For non-admin (OAuth) users: Get the initials from the full name
-    const fullName = user.user_metadata?.full_name || user.email || '';
+    const metadata = user.user_metadata as { full_name?: string };
+    const fullName = metadata.full_name || user.email || '';
     return fullName
       .split(' ')
       .map((word: string) => word[0])
@@ -63,7 +63,9 @@ const Navbar = () => {
       .toUpperCase();
   };
 
-  const avatarSrc = !isAdminUser ? user?.user_metadata?.avatar_url : null;
+  const avatarSrc = !isAdminUser
+    ? (user?.user_metadata as { avatar_url?: string })?.avatar_url
+    : null;
 
   return (
     <header className='relative flex h-[72px] w-full shrink-0 items-center px-7 md:px-15'>
@@ -144,7 +146,8 @@ const Navbar = () => {
                         <span className='subtle-medium text-neutral-800'>
                           {isAdminUser
                             ? user?.email?.split('@')[0]
-                            : user?.user_metadata?.full_name || user?.email}
+                            : (user?.user_metadata as { full_name?: string })
+                                ?.full_name || user?.email}
                         </span>
                         {isAdminUser && (
                           <span className='subtle font-bold text-neutral-800'>
@@ -170,7 +173,7 @@ const Navbar = () => {
                         href='/admin/profile'
                         className='flex w-full items-center gap-2 py-[6px] text-left text-neutral-900 hover:bg-neutral-400'
                       >
-                        <User className='size-4' />
+                        <UserIcon className='size-4' />
                         Account
                       </Link>
                     </li>
@@ -189,7 +192,7 @@ const Navbar = () => {
             </div>
           </nav>
 
-          <hr className='absolute left-0 mt-[72px] w-full border-b border-neutral-400'></hr>
+          <hr className='absolute left-0 mt-[72px] w-full border-b border-neutral-400' />
           <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         </>
       ) : (
