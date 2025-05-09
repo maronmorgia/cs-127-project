@@ -2,7 +2,14 @@
 
 import { createClient } from './server';
 
-export async function createFacility(formData: FormData) {
+type FacilityInput = {
+  type: string;
+  roomname: string;
+  capacity: number;
+  schedule?: string;
+};
+
+export async function createFacility(data: FacilityInput) {
   const supabase = await createClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
@@ -14,11 +21,9 @@ export async function createFacility(formData: FormData) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
-  const type = formData.get('type') as string;
-  const roomname = formData.get('roomname') as string;
-  const capacity = Number(formData.get('capacity'));
+  const { type, roomname, capacity, schedule } = data;
 
-  const { data, error } = await supabase
+  const { data: result, error } = await supabase
     .from('facilities')
     .insert([{ type, roomname, capacity }])
     .select();
@@ -28,8 +33,8 @@ export async function createFacility(formData: FormData) {
     throw new Error(error.message);
   }
 
-  console.log('Facility created successfully:', data);
-  return data;
+  console.log('Facility created successfully:', result);
+  return result;
 }
 
 export async function readFacilities() {
@@ -49,7 +54,15 @@ export async function readFacilities() {
   return data;
 }
 
-export async function updateFacility(id: number, formData: FormData) {
+export async function updateFacility(
+  id: number,
+  values: {
+    type: string;
+    roomname: string;
+    capacity: number;
+    schedule?: string;
+  }
+) {
   const supabase = await createClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
@@ -61,9 +74,7 @@ export async function updateFacility(id: number, formData: FormData) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
-  const type = formData.get('type') as string;
-  const roomname = formData.get('roomname') as string;
-  const capacity = Number(formData.get('capacity'));
+  const { type, roomname, capacity, schedule } = values;
 
   const { data, error } = await supabase
     .from('facilities')
