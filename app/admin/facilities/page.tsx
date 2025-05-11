@@ -41,14 +41,14 @@ type Facility = {
   type: string;
   roomname: string;
   capacity: number;
-  schedule?: string;
+  // schedule?: string;
 };
 
 type FacilityFormValues = {
   type: string;
   roomname: string;
   capacity: number | string;
-  schedule?: string;
+  // schedule?: string;
 };
 
 const validationSchema = Yup.object({
@@ -60,7 +60,7 @@ const validationSchema = Yup.object({
     .required('Capacity is required')
     .min(1, 'Capacity must be at least 1')
     .max(100, 'Capacity cannot exceed 100'),
-  schedule: Yup.string().optional(),
+  // schedule: Yup.string().optional(),
 });
 
 export default function CreateFacilityPage() {
@@ -184,7 +184,7 @@ export default function CreateFacilityPage() {
               type: editingFacility?.type ?? '',
               roomname: editingFacility?.roomname ?? '',
               capacity: editingFacility?.capacity ?? '',
-              schedule: editingFacility?.schedule ?? '',
+              // schedule: editingFacility?.schedule ?? '',
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -274,8 +274,8 @@ export default function CreateFacilityPage() {
                   />
                 </div>
 
-                {/* Schedule */}
-                <div>
+                {/* Commented out schedule. Still in plan */}
+                {/* <div>
                   <label htmlFor='schedule' className='medium leading-6'>
                     Schedule (optional)
                   </label>
@@ -285,11 +285,11 @@ export default function CreateFacilityPage() {
                     name='schedule'
                     className='mt-1 block w-full rounded border border-neutral-400 p-2'
                   />
-                </div>
+                </div> */}
 
                 <button
                   type='reset'
-                  className='rounded border border-neutral-900 px-4 py-2'
+                  className='small rounded border border-neutral-900 px-4 py-2 hover:bg-neutral-900 hover:text-white transition-all ease-in-out duration-200'
                 >
                   Reset
                 </button>
@@ -339,14 +339,14 @@ export default function CreateFacilityPage() {
                 {/* Buttons */}
                 <div className='mt-6 flex w-full justify-end gap-2'>
                   <Link href='/facility' className='w-1/2'>
-                    <button className='medium w-full rounded-[6px] border border-neutral-900 px-4 py-2 text-neutral-900 disabled:opacity-50'>
+                    <button className='medium w-full rounded-[6px] border border-neutral-900 px-4 py-2 text-neutral-900 disabled:opacity-50 hover:bg-neutral-900 hover:text-white transition-all ease-in-out duration-200'>
                       Cancel
                     </button>
                   </Link>
                   <button
                     type='submit'
                     disabled={isSubmitting}
-                    className='medium bg-primary-900 hover:bg-primary-700 w-1/2 rounded-[6px] px-4 py-2 text-white disabled:opacity-50'
+                    className='medium bg-primary-900 hover:bg-primary-700 transition-all ease-in-out duration-200 w-1/2 rounded-[6px] px-4 py-2 text-white disabled:opacity-50'
                   >
                     {isSubmitting
                       ? editingFacility

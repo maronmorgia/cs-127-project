@@ -6,7 +6,7 @@ type FacilityInput = {
   type: string;
   roomname: string;
   capacity: number;
-  schedule?: string;
+  // schedule?: string;
 };
 
 export async function createFacility(data: FacilityInput) {
@@ -21,7 +21,7 @@ export async function createFacility(data: FacilityInput) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
-  const { type, roomname, capacity, schedule } = data;
+  const { type, roomname, capacity /*, schedule */ } = data;
 
   const { data: result, error } = await supabase
     .from('facilities')
@@ -60,7 +60,7 @@ export async function updateFacility(
     type: string;
     roomname: string;
     capacity: number;
-    schedule?: string;
+    // schedule?: string;
   }
 ) {
   const supabase = await createClient();
@@ -74,7 +74,7 @@ export async function updateFacility(
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
-  const { type, roomname, capacity, schedule } = values;
+  const { type, roomname, capacity /*, schedule */ } = values;
 
   const { data, error } = await supabase
     .from('facilities')
