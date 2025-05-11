@@ -289,7 +289,7 @@ export default function CreateFacilityPage() {
 
                 <button
                   type='reset'
-                  className='small rounded border border-neutral-900 px-4 py-2 hover:bg-neutral-900 hover:text-white transition-all ease-in-out duration-200'
+                  className='small rounded border border-neutral-900 px-4 py-2 transition-all duration-200 ease-in-out hover:bg-neutral-900 hover:text-white'
                 >
                   Reset
                 </button>
@@ -339,14 +339,14 @@ export default function CreateFacilityPage() {
                 {/* Buttons */}
                 <div className='mt-6 flex w-full justify-end gap-2'>
                   <Link href='/facility' className='w-1/2'>
-                    <button className='medium w-full rounded-[6px] border border-neutral-900 px-4 py-2 text-neutral-900 disabled:opacity-50 hover:bg-neutral-900 hover:text-white transition-all ease-in-out duration-200'>
+                    <button className='medium w-full rounded-[6px] border border-neutral-900 px-4 py-2 text-neutral-900 transition-all duration-200 ease-in-out hover:bg-neutral-900 hover:text-white disabled:opacity-50'>
                       Cancel
                     </button>
                   </Link>
                   <button
                     type='submit'
                     disabled={isSubmitting}
-                    className='medium bg-primary-900 hover:bg-primary-700 transition-all ease-in-out duration-200 w-1/2 rounded-[6px] px-4 py-2 text-white disabled:opacity-50'
+                    className='medium bg-primary-900 hover:bg-primary-700 w-1/2 rounded-[6px] px-4 py-2 text-white transition-all duration-200 ease-in-out disabled:opacity-50'
                   >
                     {isSubmitting
                       ? editingFacility
