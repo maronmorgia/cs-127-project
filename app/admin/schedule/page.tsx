@@ -64,32 +64,40 @@ export default function SchedulePage() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  e.preventDefault();
 
-        const startTime = new Date(`1970-01-01T${formData.time_start}`);
-        const endTime = new Date(`1970-01-01T${formData.time_end}`);
-        const startDate = new Date(formData.date_start);
-        const endDate = new Date(formData.date_end);
+  // Time and Date Validation
+  const startTime = formData.time_start;
+  const endTime = formData.time_end;
+  const startDate = formData.date_start;
+  const endDate = formData.date_end;
 
-        if (endTime <= startTime) {
-            alert('End time must be later than start time.');
-            return;
-        }
+  if (endTime <= startTime) {
+    alert('End time must be later than start time.');
+    return;
+  }
 
-        if (endDate < startDate) {
-            alert('End date must be the same or later than start date.');
-            return;
-        }
+  if (endDate < startDate) {
+    alert('End date must be the same or later than start date.');
+    return;
+  }
 
-        const form = new FormData();
-        Object.entries(formData).forEach(([key, value]) => form.append(key, value));
+  const form = new FormData();
+  Object.entries(formData).forEach(([key, value]) => form.append(key, value));
+  
+  try {
+    await createSchedule(form);
+    const refreshed = await readSchedules();
+    setSchedules(refreshed);
+  } catch (error) {
+    alert('Failed to create schedule: ' + (error as Error).message);
+  }
+};
 
-        try {
-            await createSchedule(form);
-            const refreshed = await readSchedules();
-            setSchedules(refreshed);
-        } catch (error) {
-            alert('Failed to create schedule: ' + (error as Error).message);
+    const handleDelete = async (id: number) => {
+        if (confirm('Are you sure you want to delete this schedule?')) {
+            await deleteSchedule(id);
+            setSchedules(await readSchedules());
         }
     };
 
@@ -179,6 +187,7 @@ export default function SchedulePage() {
                     <option value="Wednesday">Wednesday</option>
                     <option value="Thursday">Thursday</option>
                     <option value="Friday">Friday</option>
+                    <option value="Friday">None</option>
                 </select>
                 <input
                     name="faculty_in_charge"
@@ -213,6 +222,12 @@ export default function SchedulePage() {
                         <p><strong>Repeat:</strong> {s.repeat_type} ({s.repeat_dates})</p>
                         <p><strong>Faculty:</strong> {s.faculty_in_charge}</p>
                         {s.description && <p><strong>Description:</strong> {s.description}</p>}
+                        <button
+                            onClick={() => handleDelete(s.id)}
+                            className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                        >
+                            Delete
+                        </button>
                     </li>
                 ))}
             </ul>
