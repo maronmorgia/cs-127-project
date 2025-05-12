@@ -17,11 +17,10 @@ export async function createFacility(formData: FormData) {
   const type = formData.get('type') as string;
   const roomname = formData.get('roomname') as string;
   const capacity = Number(formData.get('capacity'));
-  const schedule = formData.get('schedule') as string;
 
   const { data, error } = await supabase
     .from('facilities')
-    .insert([{ type, roomname, capacity, schedule: schedule || null }])
+    .insert([{ type, roomname, capacity }])
     .select();
 
   if (error) {
@@ -65,11 +64,11 @@ export async function updateFacility(id: number, formData: FormData) {
   const type = formData.get('type') as string;
   const roomname = formData.get('roomname') as string;
   const capacity = Number(formData.get('capacity'));
-  const schedule = formData.get('schedule') as string;
+ 
 
   const { data, error } = await supabase
     .from('facilities')
-    .update({ type, roomname, capacity, schedule: schedule || null })
+    .update({ type, roomname, capacity })
     .eq('id', id)
     .select();
 
