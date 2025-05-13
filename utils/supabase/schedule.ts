@@ -1,6 +1,6 @@
-'use server'
+'use server';
 
-import { createClient } from "./server"
+import { createClient } from './server';
 
 export async function createSchedule(formData: FormData) {
   const supabase = await createClient();
@@ -27,18 +27,20 @@ export async function createSchedule(formData: FormData) {
 
   const { data, error } = await supabase
     .from('schedule')
-    .insert([{
-      facility_id,
-      time_start,
-      time_end,
-      date_start,
-      date_end,
-      repeat_type,
-      repeat_dates,
-      event,
-      faculty_in_charge,
-      description,
-    }])
+    .insert([
+      {
+        facility_id,
+        time_start,
+        time_end,
+        date_start,
+        date_end,
+        repeat_type,
+        repeat_dates,
+        event,
+        faculty_in_charge,
+        description,
+      },
+    ])
     .select();
 
   if (error) {
