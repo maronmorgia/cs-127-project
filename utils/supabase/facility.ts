@@ -64,7 +64,6 @@ export async function updateFacility(id: number, formData: FormData) {
   const type = formData.get('type') as string;
   const roomname = formData.get('roomname') as string;
   const capacity = Number(formData.get('capacity'));
- 
 
   const { data, error } = await supabase
     .from('facilities')
