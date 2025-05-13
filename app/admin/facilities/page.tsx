@@ -34,7 +34,6 @@ import {
   Funnel,
   Search,
 } from 'lucide-react';
-import Link from 'next/link';
 import FacilityCard from '@/app/components/FacilityCard';
 import { Facility } from '@/app/components/FacilityCard';
 
@@ -105,6 +104,7 @@ export default function CreateFacilityPage() {
       }
       await fetchFacilities();
       resetForm();
+      setView('home');
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : 'Failed to process facility'
@@ -464,11 +464,16 @@ export default function CreateFacilityPage() {
 
                     {/* Buttons */}
                     <div className='mt-6 flex w-full justify-end gap-2'>
-                      <Link href='/facility' className='w-1/2'>
-                        <button className='medium w-full rounded-[6px] border border-neutral-900 px-4 py-2 text-neutral-900 transition-all duration-200 ease-in-out hover:bg-neutral-900 hover:text-white disabled:opacity-50'>
+                      <div className='w-1/2'>
+                        <button
+                          onClick={() => {
+                            setView('home');
+                          }}
+                          className='medium w-full rounded-[6px] border border-neutral-900 px-4 py-2 text-neutral-900 transition-all duration-200 ease-in-out hover:bg-neutral-900 hover:text-white disabled:opacity-50'
+                        >
                           Cancel
                         </button>
-                      </Link>
+                      </div>
                       <button
                         type='submit'
                         disabled={isSubmitting}
