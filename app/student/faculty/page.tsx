@@ -98,10 +98,7 @@ export default function UserFacilityPage() {
             ) : (
               <div className='mt-4 grid w-full grid-cols-2 items-stretch gap-x-[12px] gap-y-[20px]'>
                 {filteredFacilities.map((facility) => (
-                  <FacilityCard
-                    key={facility.id}
-                    facility={facility}
-                  />
+                  <FacilityCard key={facility.id} facility={facility} />
                 ))}
               </div>
             )}
