@@ -3,6 +3,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 import {
   X,
@@ -21,6 +22,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
+  const pathname = usePathname();
+  const isAdminPath = pathname.startsWith('/admin');
+
   return (
     <aside
       className={clsx(
@@ -43,27 +47,49 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         <SidebarLink label='Home' href='/' icon={Home} />
       </nav>
 
-      {/* Admin section */}
-      <section className='border-t border-neutral-400 px-5 py-1.5'>
-        <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>Admin</h2>
-        <SidebarLink label='Add Facility' href='/' icon={Plus} />
-        <SidebarLink label='Change Password' href='/' icon={Edit} />
-      </section>
+      {/* Admin section (visible only in /admin paths) */}
+      {isAdminPath && (
+        <section className='border-t border-neutral-400 px-5 py-1.5'>
+          <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>Admin</h2>
+          <SidebarLink
+            label='Add Facility'
+            href='/admin/facilities/create'
+            icon={Plus}
+          />
+          <SidebarLink
+            label='Change Password'
+            href='/admin/change-password'
+            icon={Edit}
+          />
+        </section>
+      )}
 
       {/* Facilities section */}
       <section className='border-t border-neutral-400 px-5 py-3'>
         <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>
           Facilities
         </h2>
-        <SidebarLink label='Reservation Form' href='/' icon={FileText} />
-        <SidebarLink label='Laboratory Rooms' href='/' icon={FlaskConical} />
-        <SidebarLink label='Meeting Rooms' href='/' icon={Subtitles} />
+        <SidebarLink
+          label='Reservation Form'
+          href='/reservation'
+          icon={FileText}
+        />
+        <SidebarLink
+          label='Laboratory Rooms'
+          href='/labs'
+          icon={FlaskConical}
+        />
+        <SidebarLink label='Meeting Rooms' href='/meetings' icon={Subtitles} />
       </section>
 
       {/* Forms Section */}
       <section className='border-t border-neutral-400 px-5 py-3'>
         <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>Forms</h2>
-        <SidebarLink label='Reservation Forms' href='/' icon={FileTextIcon} />
+        <SidebarLink
+          label='Reservation Forms'
+          href='/forms'
+          icon={FileTextIcon}
+        />
       </section>
     </aside>
   );
@@ -84,7 +110,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
     href={href}
     className='medium flex items-center gap-2 rounded px-2 py-1.5 text-neutral-900 hover:bg-neutral-300'
   >
-    <Icon className='size-4' />
+    <Icon className='text-secondary-900 size-4' />
     <span>{label}</span>
   </Link>
 );

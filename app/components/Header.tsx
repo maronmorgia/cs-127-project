@@ -53,7 +53,7 @@ export default function Header() {
 
   return (
     <header>
-      <Navbar />
+      <Navbar variant='home' />
       <Container>
         <section className='flex w-full flex-col gap-10 lg:flex-row lg:justify-between lg:gap-15'>
           {/* LEFT SECTION */}
