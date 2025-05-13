@@ -33,7 +33,7 @@ export default function UserFacilityPage() {
 
   const filteredFacilities = facilities.filter((facility) => {
     const matchType = filter === 'all' || facility.type === filter;
-    const matchId = searchId === '' || facility.id.toString() === searchId;
+    const matchId = searchId === '' || facility.roomname.includes(searchId);
     return matchType && matchId;
   });
 
