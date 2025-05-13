@@ -37,6 +37,7 @@ export default function SchedulePage() {
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [facilities, setFacilities] = useState<Facility[]>([]);
     const [formData, setFormData] = useState({
+        id: 0,
         facility_id: '',
         time_start: '',
         time_end: '',
@@ -48,6 +49,7 @@ export default function SchedulePage() {
         faculty_in_charge: '',
         description: '',
     });
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         async function loadData() {
@@ -63,36 +65,69 @@ export default function SchedulePage() {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const resetForm = () => {
+        setFormData({
+            id: 0,
+            facility_id: '',
+            time_start: '',
+            time_end: '',
+            date_start: '',
+            date_end: '',
+            repeat_type: '',
+            repeat_dates: '',
+            event: '',
+            faculty_in_charge: '',
+            description: '',
+        });
+        setIsEditing(false);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+        e.preventDefault();
 
-  // Time and Date Validation
-  const startTime = formData.time_start;
-  const endTime = formData.time_end;
-  const startDate = formData.date_start;
-  const endDate = formData.date_end;
+        if (formData.time_end <= formData.time_start) {
+            alert('End time must be later than start time.');
+            return;
+        }
+        if (formData.date_end < formData.date_start) {
+            alert('End date must be the same or later than start date.');
+            return;
+        }
 
-  if (endTime <= startTime) {
-    alert('End time must be later than start time.');
-    return;
-  }
+        const form = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key !== 'id') form.append(key, value.toString());
+        });
 
-  if (endDate < startDate) {
-    alert('End date must be the same or later than start date.');
-    return;
-  }
+        try {
+            if (isEditing) {
+                await updateSchedule(formData.id, form);
+            } else {
+                await createSchedule(form);
+            }
+            setSchedules(await readSchedules());
+            resetForm();
+        } catch (error) {
+            alert('Failed to save schedule: ' + (error as Error).message);
+        }
+    };
 
-  const form = new FormData();
-  Object.entries(formData).forEach(([key, value]) => form.append(key, value));
-  
-  try {
-    await createSchedule(form);
-    const refreshed = await readSchedules();
-    setSchedules(refreshed);
-  } catch (error) {
-    alert('Failed to create schedule: ' + (error as Error).message);
-  }
-};
+    const handleEdit = (schedule: Schedule) => {
+        setFormData({
+            id: schedule.id,
+            facility_id: schedule.facility_id.toString(),
+            time_start: schedule.time_start,
+            time_end: schedule.time_end,
+            date_start: schedule.date_start,
+            date_end: schedule.date_end,
+            repeat_type: schedule.repeat_type,
+            repeat_dates: schedule.repeat_dates,
+            event: schedule.event,
+            faculty_in_charge: schedule.faculty_in_charge,
+            description: schedule.description || '',
+        });
+        setIsEditing(true);
+    };
 
     const handleDelete = async (id: number) => {
         if (confirm('Are you sure you want to delete this schedule?')) {
@@ -103,7 +138,7 @@ export default function SchedulePage() {
 
     return (
         <div className="max-w-2xl mx-auto p-4 text-black">
-            <h1 className="text-2xl font-bold mb-4">Create Schedule</h1>
+            <h1 className="text-2xl font-bold mb-4">{isEditing ? 'Update Schedule' : 'Create Schedule'}</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <select
                     name="facility_id"
@@ -119,6 +154,7 @@ export default function SchedulePage() {
                         </option>
                     ))}
                 </select>
+
                 <input
                     name="event"
                     value={formData.event}
@@ -127,38 +163,58 @@ export default function SchedulePage() {
                     placeholder="Event Name"
                     className="w-full border rounded p-2"
                 />
-                <input
-                    type="time"
-                    name="time_start"
-                    value={formData.time_start}
-                    onChange={handleChange}
-                    required
-                    className="w-full border rounded p-2"
-                />
-                <input
-                    type="time"
-                    name="time_end"
-                    value={formData.time_end}
-                    onChange={handleChange}
-                    required
-                    className="w-full border rounded p-2"
-                />
-                <input
-                    type="date"
-                    name="date_start"
-                    value={formData.date_start}
-                    onChange={handleChange}
-                    required
-                    className="w-full border rounded p-2"
-                />
-                <input
-                    type="date"
-                    name="date_end"
-                    value={formData.date_end}
-                    onChange={handleChange}
-                    required
-                    className="w-full border rounded p-2"
-                />
+
+                <div>
+  <label className="block mb-1 font-medium">Start Time</label>
+  <input
+    type="time"
+    name="time_start"
+    value={formData.time_start}
+    onChange={handleChange}
+    required
+    min="06:00"
+    max="18:00"
+    className="w-full border rounded p-2"
+  />
+</div>
+<div>
+  <label className="block mb-1 font-medium">End Time</label>
+  <input
+    type="time"
+    name="time_end"
+    value={formData.time_end}
+    onChange={handleChange}
+    required
+    min="06:00"
+    max="18:00"
+    className="w-full border rounded p-2"
+  />
+</div>
+
+                <div>
+                    <label className="block mb-1 font-medium">Start Date</label>
+                    <input
+                        type="date"
+                        name="date_start"
+                        value={formData.date_start}
+                        onChange={handleChange}
+                        required
+                        className="w-full border rounded p-2"
+                    />
+                </div>
+                <div>
+                    <label className="block mb-1 font-medium">End Date</label>
+                    <input
+                        type="date"
+                        name="date_end"
+                        value={formData.date_end}
+                        onChange={handleChange}
+                        min={formData.date_start}
+                        required
+                        className="w-full border rounded p-2"
+                    />
+                </div>
+
                 <select
                     name="repeat_type"
                     value={formData.repeat_type}
@@ -187,8 +243,9 @@ export default function SchedulePage() {
                     <option value="Wednesday">Wednesday</option>
                     <option value="Thursday">Thursday</option>
                     <option value="Friday">Friday</option>
-                    <option value="Friday">None</option>
+                    <option value="None">None</option>
                 </select>
+
                 <input
                     name="faculty_in_charge"
                     value={formData.faculty_in_charge}
@@ -203,12 +260,24 @@ export default function SchedulePage() {
                     placeholder="Description (optional)"
                     className="w-full border rounded p-2"
                 />
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                >
-                    Create Schedule
-                </button>
+
+                <div className="flex gap-2">
+                    <button
+                        type="submit"
+                        className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                    >
+                        {isEditing ? 'Update' : 'Create'} Schedule
+                    </button>
+                    {isEditing && (
+                        <button
+                            type="button"
+                            onClick={resetForm}
+                            className="flex-1 bg-gray-400 text-white py-2 rounded hover:bg-gray-500"
+                        >
+                            Cancel
+                        </button>
+                    )}
+                </div>
             </form>
 
             <h2 className="text-xl font-semibold mt-8 mb-4">Existing Schedules</h2>
@@ -222,12 +291,20 @@ export default function SchedulePage() {
                         <p><strong>Repeat:</strong> {s.repeat_type} ({s.repeat_dates})</p>
                         <p><strong>Faculty:</strong> {s.faculty_in_charge}</p>
                         {s.description && <p><strong>Description:</strong> {s.description}</p>}
-                        <button
-                            onClick={() => handleDelete(s.id)}
-                            className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-                        >
-                            Delete
-                        </button>
+                        <div className="flex gap-2 mt-2">
+                            <button
+                                onClick={() => handleEdit(s)}
+                                className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={() => handleDelete(s.id)}
+                                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>
