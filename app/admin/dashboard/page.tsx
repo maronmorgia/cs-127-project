@@ -4,24 +4,8 @@ import '@/app/globals.css';
 import { useEffect, useState } from 'react';
 import Container from '@/app/components/Container';
 import Navbar from '@/app/components/Navbar';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Building2,
-  Calendar,
-  Home,
-  LayoutDashboard,
-  Menu,
-  Settings,
-  Users,
-  X,
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Building2, Calendar, Users } from 'lucide-react';
 import { readFacilities } from '@/utils/supabase/facility';
 // import { readScheduledEvents } from '@/utils/supabase/schedule'; // Commented out
 // import { readAdmins } from '@/utils/supabase/admin'; // Commented out
