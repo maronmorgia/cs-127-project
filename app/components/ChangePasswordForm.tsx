@@ -182,7 +182,7 @@ export default function ChangePassword({ onClose }: { onClose?: () => void }) {
                   <button
                     type='button'
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className='absolute top-1/2 right-3 -translate-y-1/2 text-neutral-900'
+                    className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-neutral-900'
                   >
                     {showConfirmPassword ? (
                       <Eye className='size-4' />

@@ -9,17 +9,17 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardFooter,
+  CardDescription,
 } from '@/components/ui/card';
 import { Building2, Calendar, Users } from 'lucide-react';
 import ChangePassword from '@/app/components/ChangePasswordForm';
 import { readFacilities } from '@/utils/supabase/facility';
-// import { readScheduledEvents } from '@/utils/supabase/schedule'; // Commented out
-// import { readAdmins } from '@/utils/supabase/admin'; // Commented out
+//import { readSchedules } from '@/utils/supabase/schedule';
+// import { readAdmins } from '@/utils/supabase/admin';
 
 export default function DashboardPage() {
   const [facilitiesCount, setFacilitiesCount] = useState<number | undefined>();
-  const [showChangePassword, setShowChangePassword] = useState(true);
+  const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchFacilitiesCount() {
@@ -34,110 +34,91 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <main>
+    <main className='min-h-screen bg-white'>
       <Navbar variant='facility' />
-      <Container className='!p-[30px]'>
-        <section className='mb-8 inline-flex flex-col items-start justify-start self-stretch'>
-          <h1 className='text-primary-900 h1 justify-start'>Dashboard</h1>
+      <Container className='w-full px-2 sm:px-4'>
+        <section className='mb-8'>
+          <h1 className='text-primary-900 h1'>Dashboard</h1>
         </section>
         <section>
-          <div className='mb-8 flex justify-center'>
-            <div className='grid w-full max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-              <Card className='flex flex-1 flex-col'>
-                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='lead text-neutral-900'>
-                    Facility
-                  </CardTitle>
-                  <Building2 className='text-secondary-900 relative h-6 w-6' />
-                </CardHeader>
-                <CardContent>
-                  <h2 className='text-neutral-900'>
-                    {facilitiesCount !== undefined
-                      ? `${facilitiesCount} Facilities`
-                      : 'Loading...'}
+          <div className='mb-8'>
+            <Card className='overflow-hidden'>
+              {/* Facility */}
+              <div className='grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
+                <div className='flex flex-col items-center justify-center p-4 text-center'>
+                  <Building2 className='text-secondary-900 h-8 w-8' />
+                  <h2 className='text-primary-900 text-2xl font-bold'>
+                    {facilitiesCount ?? 'Loading...'}
                   </h2>
-                </CardContent>
-                {/* Comment out or keep placeholders for Schedule and Administrators */}
-                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='lead text-neutral-900'>
-                    Schedule
-                  </CardTitle>
-                  <Calendar className='text-secondary-900 relative h-6 w-6' />
-                </CardHeader>
-                <CardContent>
-                  <h2 className='text-neutral-900'>Loading...</h2>
-                </CardContent>
-                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='lead text-neutral-900'>
-                    Administrators
-                  </CardTitle>
-                  <Users className='text-secondary-900 relative h-6 w-6' />
-                </CardHeader>
-                <CardContent>
-                  <h2 className='text-neutral-900'>Loading...</h2>
-                </CardContent>
-              </Card>
-            </div>
+                  <p className='lead text-neutral-900'>Facilities</p>
+                </div>
+                {/* Event */}
+                <div className='flex flex-col items-center justify-center p-4 text-center'>
+                  <Calendar className='text-secondary-900 h-8 w-8' />
+                  <h2 className='text-primary-900 text-2xl font-bold'>0</h2>
+                  {/* Placeholder for events count */}
+                  <p className='lead text-neutral-900'>Events</p>
+                </div>
+                {/* Admin */}
+                <div className='flex flex-col items-center justify-center p-4 text-center'>
+                  <Users className='text-secondary-900 h-8 w-8' />
+                  <h2 className='text-primary-900 text-2xl font-bold'>0</h2>
+                  {/* Placeholder for admins count */}
+                  <p className='lead text-neutral-900'>Admins</p>
+                </div>
+              </div>
+            </Card>
           </div>
         </section>
-        {/*Management Card Section*/}
+        {/* Management & Account Card Section */}
         <section>
-          <div className='mb-8 flex justify-center'>
-            <div className='grid w-full max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-              <Card className='flex flex-1 flex-col'>
-                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='lead text-neutral-900'>
-                    Management
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className='text-neutral-400'>
-                    Manage facilities and scheduled events
+          <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
+            <Card className='lg:col-span-4'>
+              <CardHeader>
+                <CardTitle className='lead text-neutral-900'>
+                  Management
+                </CardTitle>
+                <CardDescription>
+                  <p className='small text-neutral-400'>
+                    Manage your facilities, events, and admins from here.
                   </p>
-                </CardContent>
-                <CardFooter className='mt-auto'>
-                  <Button
-                    variant='default'
-                    className='bg-primary-900 hover:bg-primary-700 w-full cursor-pointer duration-200 ease-in-out'
-                    onClick={() => (window.location.href = '/admin/facilities')}
-                  >
-                    Manage
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-        </section>
-        {/* Change Password Section */}
-        <section>
-          <div className='flex justify-center'>
-            <div className='grid w-full max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-              <Card className='flex flex-1 flex-col'>
-                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='lead text-neutral-900'>
-                    Account Password
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className='text-neutral-400'>
-                    Change your administrator password
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant='default'
+                  className='bg-primary-900 hover:bg-primary-700 small w-full cursor-pointer duration-200 ease-in-out'
+                  onClick={() => (window.location.href = '/admin/facilities')}
+                >
+                  Manage
+                </Button>
+              </CardContent>
+            </Card>
+            <Card className='flex h-full flex-col lg:col-span-3'>
+              <CardHeader>
+                <CardTitle className='lead text-neutral-900'>
+                  Password
+                </CardTitle>
+                <CardDescription>
+                  <p className='small text-neutral-400'>
+                    Update your password regularly to keep your account secure.
                   </p>
-                </CardContent>
-                <CardFooter className='mt-auto'>
-                  <Button
-                    variant='default'
-                    className='bg-primary-900 hover:bg-primary-700 w-full cursor-pointer duration-200 ease-in-out'
-                    onClick={() => setShowChangePassword(true)}
-                  >
-                    Change Password
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className='mt-auto'>
+                <Button
+                  variant='default'
+                  className='bg-primary-900 hover:bg-primary-700 small w-full cursor-pointer duration-200 ease-in-out'
+                  onClick={() => setShowChangePassword(true)}
+                >
+                  Change Password
+                </Button>
+              </CardContent>
+            </Card>
           </div>
           {/* Modal Overlay for ChangePassword */}
           {showChangePassword && (
-            <div className='relative w-full max-w-xl rounded-xl bg-white p-8 shadow-lg'>
+            <div className='bg-opacity-80 fixed inset-0 z-50 flex items-center justify-center'>
               <button
                 className='absolute top-4 right-4 z-10 bg-transparent text-2xl text-gray-500 hover:text-gray-700'
                 onClick={() => setShowChangePassword(false)}
