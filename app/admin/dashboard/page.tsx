@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Container from '@/app/components/Container';
 import Navbar from '@/app/components/Navbar';
 import {
@@ -20,8 +21,12 @@ import { readFacilities } from '@/utils/supabase/facility';
 export default function DashboardPage() {
   const [facilitiesCount, setFacilitiesCount] = useState<number | undefined>();
   const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    setIsMounted(true);
+
     async function fetchFacilitiesCount() {
       try {
         const facilities = await readFacilities();
@@ -48,7 +53,7 @@ export default function DashboardPage() {
                 <div className='flex flex-col items-center justify-center p-4 text-center'>
                   <Building2 className='text-secondary-900 h-8 w-8' />
                   <h2 className='text-primary-900 text-2xl font-bold'>
-                    {facilitiesCount ?? 'Loading...'}
+                    {isMounted ? (facilitiesCount ?? 0) : 'Loading...'}
                   </h2>
                   <p className='lead text-neutral-900'>Facilities</p>
                 </div>
@@ -88,7 +93,7 @@ export default function DashboardPage() {
                 <Button
                   variant='default'
                   className='bg-primary-900 hover:bg-primary-700 small w-full cursor-pointer duration-200 ease-in-out'
-                  onClick={() => (window.location.href = '/admin/facilities')}
+                  onClick={() => router.push('/admin/facilities')}
                 >
                   Manage
                 </Button>
