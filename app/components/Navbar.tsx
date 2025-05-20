@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import Link from 'next/link';
-import { Menu, LogOut, User as UserIcon, X } from 'lucide-react';
+import { Menu, LogOut, X } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { createClient } from '@/utils/supabase/client';
 import { logout } from '@/utils/supabase/authentications';
