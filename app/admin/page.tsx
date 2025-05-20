@@ -77,8 +77,8 @@ export default function DashboardPage() {
         </section>
         {/* Management & Account Card Section */}
         <section>
-          <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
-            <Card className='lg:col-span-4'>
+          <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-2'>
+            <Card className='flex h-full flex-col'>
               <CardHeader>
                 <CardTitle className='lead text-neutral-900'>
                   Management
@@ -89,7 +89,7 @@ export default function DashboardPage() {
                   </p>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className='mt-auto'>
                 <Button
                   variant='default'
                   className='bg-primary-900 hover:bg-primary-700 small w-full cursor-pointer duration-200 ease-in-out'
@@ -99,7 +99,7 @@ export default function DashboardPage() {
                 </Button>
               </CardContent>
             </Card>
-            <Card className='flex h-full flex-col lg:col-span-3'>
+            <Card className='flex h-full flex-col'>
               <CardHeader>
                 <CardTitle className='lead text-neutral-900'>
                   Password
