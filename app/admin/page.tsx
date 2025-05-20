@@ -39,7 +39,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <main className='min-h-screen bg-white'>
+    <main className='min-h-screen bg-neutral-50'>
       <Navbar variant='facility' />
       <Container className='w-full px-2 sm:px-4'>
         <section className='mb-8'>

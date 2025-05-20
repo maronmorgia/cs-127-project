@@ -35,9 +35,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       aria-label='Admin sidebar'
     >
       {/* Top section */}
-      <div className='flex items-center justify-between px-7 py-3 text-black'>
+      <div className='flex items-center justify-between px-7 py-3 text-neutral-900'>
         <Logo variant='full' />
-        <button onClick={onClose} aria-label='Close sidebar'>
+        <button
+          onClick={onClose}
+          aria-label='Close sidebar'
+          className='hover:bg-primary-50 cursor-pointer rounded p-2 duration-200 ease-in-out focus:outline-none'
+        >
           <X />
         </button>
       </div>
@@ -108,7 +112,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
 }) => (
   <Link
     href={href}
-    className='medium flex items-center gap-2 rounded px-2 py-1.5 text-neutral-900 hover:bg-neutral-300'
+    className='medium hover:bg-primary-50 flex items-center gap-2 rounded px-2 py-1.5 text-neutral-900'
   >
     <Icon className='text-secondary-900 size-4' />
     <span>{label}</span>
