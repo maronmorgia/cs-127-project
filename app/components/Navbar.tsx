@@ -177,17 +177,6 @@ const Navbar = ({ variant }: NavbarProps) => {
               <hr className='absolute left-0 w-full border-black' />
 
               <ul className='px-3 py-2' role='none'>
-                {isAdminPath && (
-                  <li role='menuitem'>
-                    <Link
-                      href='/admin/profile'
-                      className='flex w-full items-center gap-2 py-[6px] text-left text-neutral-900 hover:bg-neutral-400'
-                    >
-                      <UserIcon className='size-4' />
-                      Account
-                    </Link>
-                  </li>
-                )}
                 <li role='menuitem'>
                   <button
                     onClick={logout}
