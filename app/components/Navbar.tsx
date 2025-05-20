@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import Link from 'next/link';
-import { Menu, LogOut, X } from 'lucide-react';
+import { Menu, LogOut } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { createClient } from '@/utils/supabase/client';
 import { logout } from '@/utils/supabase/authentications';
@@ -105,7 +105,7 @@ const Navbar = ({ variant }: NavbarProps) => {
       <nav className='flex w-full items-center justify-between'>
         <button
           aria-label='Sidebar toggle'
-          className='flex items-center justify-center gap-2 rounded-md p-2'
+          className='hover:bg-primary-50 flex cursor-pointer items-center justify-center gap-2 rounded-md p-2 duration-200 ease-in-out focus:outline-none'
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <Menu className='size-8 text-black' />
@@ -122,7 +122,7 @@ const Navbar = ({ variant }: NavbarProps) => {
             aria-expanded={dropdownOpen}
             aria-controls='user-dropdown'
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className='relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full text-base font-normal focus:ring-2 focus:ring-neutral-400 focus:outline-none'
+            className='hover:bg-primary-50 relative flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full text-base font-normal focus:ring-2 focus:ring-neutral-400 focus:outline-none'
             style={{ fontFamily: 'var(--font-schibsted)' }}
           >
             <div
@@ -152,16 +152,14 @@ const Navbar = ({ variant }: NavbarProps) => {
                     {getInitials()}
                   </div>
                   <div className='flex flex-col'>
-                    <span className='subtle-medium text-neutral-800'>
+                    <span className='small text-neutral-800'>
                       {isAdminUser
                         ? user?.email?.split('@')[0]
                         : (user?.user_metadata as { full_name?: string })
                             ?.full_name || user?.email}
                     </span>
                     {isAdminUser && (
-                      <span className='subtle font-bold text-neutral-800'>
-                        Admin
-                      </span>
+                      <span className='subtle text-neutral-900'>Admin</span>
                     )}
                   </div>
                 </div>
@@ -169,9 +167,7 @@ const Navbar = ({ variant }: NavbarProps) => {
                   onClick={() => setDropdownOpen(false)}
                   aria-label='Close menu'
                   className='rounded p-1 focus:ring-2 focus:ring-black focus:ring-offset-2 focus:outline-none'
-                >
-                  <X className='text-neutral-900' />
-                </button>
+                ></button>
               </header>
 
               <hr className='absolute left-0 w-full border-black' />
@@ -180,7 +176,7 @@ const Navbar = ({ variant }: NavbarProps) => {
                 <li role='menuitem'>
                   <button
                     onClick={logout}
-                    className='flex w-full items-center gap-2 py-[6px] text-red-600 hover:bg-neutral-400'
+                    className='small hover:bg-primary-50 flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-[6px] text-left text-red-600 duration-200 ease-in-out focus:outline-none'
                   >
                     <LogOut className='size-4' />
                     Log out
