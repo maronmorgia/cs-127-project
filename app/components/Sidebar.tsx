@@ -26,76 +26,91 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const isAdminPath = pathname.startsWith('/admin');
 
   return (
-    <aside
-      className={clsx(
-        'fixed top-0 left-0 z-50 h-full w-[375px] bg-neutral-50 shadow-lg transition-transform duration-300',
-        open ? 'translate-x-0' : '-translate-x-full'
-      )}
-      role='navigation'
-      aria-label='Admin sidebar'
-    >
-      {/* Top section */}
-      <div className='flex items-center justify-between px-7 py-3 text-neutral-900'>
-        <Logo variant='full' />
-        <button
+    <>
+      {open && (
+        <div
+          className='fixed inset-0 z-40 bg-black/30 transition-opacity duration-300'
+          aria-hidden='true'
           onClick={onClose}
-          aria-label='Close sidebar'
-          className='hover:bg-primary-50 cursor-pointer rounded p-2 duration-200 ease-in-out focus:outline-none'
-        >
-          <X />
-        </button>
-      </div>
+        />
+      )}
+      <aside
+        className={clsx(
+          'fixed top-0 left-0 z-50 h-full w-[375px] bg-neutral-800 shadow-lg transition-transform duration-300',
+          open ? 'translate-x-0' : '-translate-x-full'
+        )}
+        role='navigation'
+        aria-label='Admin sidebar'
+      >
+        {/* Top section */}
+        <div className='flex items-center justify-between px-7 py-3 text-neutral-50'>
+          <Logo variant='full' />
+          <button
+            onClick={onClose}
+            aria-label='Close sidebar'
+            className='cursor-pointer rounded p-2 duration-200 ease-in-out hover:bg-neutral-50 hover:text-neutral-900 focus:outline-none'
+          >
+            <X />
+          </button>
+        </div>
 
-      {/* Navigation links */}
-      <nav className='flex flex-col gap-2 px-5 py-3'>
-        <SidebarLink label='Home' href='/' icon={Home} />
-      </nav>
+        {/* Navigation links */}
+        <nav className='flex flex-col gap-2 px-5 py-3'>
+          <SidebarLink label='Home' href='/' icon={Home} />
+        </nav>
 
-      {/* Admin section (visible only in /admin paths) */}
-      {isAdminPath && (
-        <section className='border-t border-neutral-400 px-5 py-1.5'>
-          <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>Admin</h2>
+        {/* Admin section (visible only in /admin paths) */}
+        {isAdminPath && (
+          <section className='px-5 py-1.5'>
+            <h2 className='lead px-2 py-1.5 leading-7 text-neutral-50'>
+              Admin
+            </h2>
+            <SidebarLink
+              label='Add Facility'
+              href='/admin/facilities/create'
+              icon={Plus}
+            />
+            <SidebarLink
+              label='Change Password'
+              href='/admin/change-password'
+              icon={Edit}
+            />
+          </section>
+        )}
+
+        {/* Facilities section */}
+        <section className='px-5 py-3'>
+          <h2 className='lead px-2 py-1.5 leading-7 text-neutral-50'>
+            Facilities
+          </h2>
           <SidebarLink
-            label='Add Facility'
-            href='/admin/facilities/create'
-            icon={Plus}
+            label='Reservation Form'
+            href='/reservation'
+            icon={FileText}
           />
           <SidebarLink
-            label='Change Password'
-            href='/admin/change-password'
-            icon={Edit}
+            label='Laboratory Rooms'
+            href='/labs'
+            icon={FlaskConical}
+          />
+          <SidebarLink
+            label='Meeting Rooms'
+            href='/meetings'
+            icon={Subtitles}
           />
         </section>
-      )}
 
-      {/* Facilities section */}
-      <section className='border-t border-neutral-400 px-5 py-3'>
-        <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>
-          Facilities
-        </h2>
-        <SidebarLink
-          label='Reservation Form'
-          href='/reservation'
-          icon={FileText}
-        />
-        <SidebarLink
-          label='Laboratory Rooms'
-          href='/labs'
-          icon={FlaskConical}
-        />
-        <SidebarLink label='Meeting Rooms' href='/meetings' icon={Subtitles} />
-      </section>
-
-      {/* Forms Section */}
-      <section className='border-t border-neutral-400 px-5 py-3'>
-        <h2 className='lead px-2 py-1.5 leading-7 text-neutral-900'>Forms</h2>
-        <SidebarLink
-          label='Reservation Forms'
-          href='/forms'
-          icon={FileTextIcon}
-        />
-      </section>
-    </aside>
+        {/* Forms Section */}
+        <section className='px-5 py-3'>
+          <h2 className='lead px-2 py-1.5 leading-7 text-neutral-50'>Forms</h2>
+          <SidebarLink
+            label='Reservation Forms'
+            href='/forms'
+            icon={FileTextIcon}
+          />
+        </section>
+      </aside>
+    </>
   );
 };
 
@@ -112,7 +127,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
 }) => (
   <Link
     href={href}
-    className='medium hover:bg-primary-50 flex items-center gap-2 rounded px-2 py-1.5 text-neutral-900'
+    className='medium flex items-center gap-2 rounded px-2 py-1.5 text-neutral-50 duration-200 ease-in-out hover:bg-neutral-50 hover:text-neutral-900 focus:outline-none'
   >
     <Icon className='text-secondary-900 size-4' />
     <span>{label}</span>

@@ -105,7 +105,7 @@ const Navbar = ({ variant }: NavbarProps) => {
       <nav className='flex w-full items-center justify-between'>
         <button
           aria-label='Sidebar toggle'
-          className='hover:bg-primary-50 flex cursor-pointer items-center justify-center gap-2 rounded-md p-2 duration-200 ease-in-out focus:outline-none'
+          className='flex cursor-pointer items-center justify-center gap-2 rounded-md p-2 duration-200 ease-in-out hover:bg-neutral-200 focus:outline-none'
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <Menu className='size-8 text-black' />
@@ -176,7 +176,7 @@ const Navbar = ({ variant }: NavbarProps) => {
                 <li role='menuitem'>
                   <button
                     onClick={logout}
-                    className='small hover:bg-primary-50 flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-[6px] text-left text-red-600 duration-200 ease-in-out focus:outline-none'
+                    className='medium flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-[6px] text-left text-red-600 duration-200 ease-in-out hover:bg-neutral-200 focus:outline-none'
                   >
                     <LogOut className='size-4' />
                     Log out
