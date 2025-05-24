@@ -77,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             </h2>
             <SidebarLink
               label='Add Facility'
-              href='/admin/facilities/create'
+              href='/admin/facilities'
               icon={Plus}
             />
             <SidebarLink
