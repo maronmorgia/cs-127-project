@@ -36,6 +36,7 @@ import {
 } from 'lucide-react';
 import FacilityCard from '@/app/components/FacilityCard';
 import { Facility } from '@/app/components/FacilityCard';
+import { useSearchParams } from 'next/navigation';
 
 type FacilityFormValues = {
   type: string;
@@ -59,16 +60,34 @@ export default function CreateFacilityPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [filteredFacilities, setFilteredFacilities] = useState<Facility[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>('all');
   const [searchId, setSearchId] = useState<string>('');
   const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
   const [showFilter, setShowFilter] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     fetchFacilities();
   }, []);
+
+  useEffect(() => {
+    const typeFilter = searchParams.get('type');
+
+    if (typeFilter && facilities.length > 0) {
+      const filtered = facilities.filter(
+        (facility) => facility.type?.toLowerCase() === typeFilter.toLowerCase()
+      );
+      setFilteredFacilities(filtered);
+      setFilter(typeFilter);
+
+      window.history.replaceState({}, '', '/admin/facilities');
+    } else {
+      setFilteredFacilities(facilities);
+    }
+  }, [searchParams, facilities]);
 
   const fetchFacilities = async () => {
     try {
@@ -129,7 +148,7 @@ export default function CreateFacilityPage() {
     setView('form');
   };
 
-  const filteredFacilities = facilities.filter((facility) => {
+  const filteredFacilitiesBySearch = filteredFacilities.filter((facility) => {
     const matchType = filter === 'all' || facility.type === filter;
     const matchId = searchId === '' || facility.roomname.includes(searchId);
     return matchType && matchId;
@@ -245,7 +264,7 @@ export default function CreateFacilityPage() {
                       </figure>
                     </button>
                   </aside>
-                  {filteredFacilities.map((facility) => (
+                  {filteredFacilitiesBySearch.map((facility) => (
                     <FacilityCard
                       key={facility.id}
                       facility={facility}
