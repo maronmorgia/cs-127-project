@@ -3,8 +3,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Logo from './Logo';
+
 import {
   X,
   Home,
@@ -19,24 +20,33 @@ import {
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  setShowChangePassword?: (show: boolean) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const isAdminPath = pathname.startsWith('/admin');
+
+  const handleChangePasswordClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClose();
+
+    router.push('/admin?modal=changePassword');
+  };
 
   return (
     <>
       {open && (
         <div
-          className='fixed inset-0 z-40 bg-black/30 transition-opacity duration-300'
+          className='rad fixed inset-0 z-40 bg-black/30 transition-opacity duration-300'
           aria-hidden='true'
           onClick={onClose}
         />
       )}
       <aside
         className={clsx(
-          'fixed top-0 left-0 z-50 h-full w-[375px] bg-neutral-800 shadow-lg transition-transform duration-300',
+          'fixed top-0 left-0 z-50 h-full w-[375px] rounded-r-lg bg-neutral-800 shadow-lg transition-transform duration-300',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
         role='navigation'
@@ -72,8 +82,9 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             />
             <SidebarLink
               label='Change Password'
-              href='/admin/change-password'
+              href='/admin'
               icon={Edit}
+              onClick={handleChangePasswordClick}
             />
           </section>
         )}
@@ -118,16 +129,19 @@ interface SidebarLinkProps {
   label: string;
   href: string;
   icon: React.ElementType;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 const SidebarLink: React.FC<SidebarLinkProps> = ({
   label,
   href,
   icon: Icon,
+  onClick,
 }) => (
   <Link
     href={href}
     className='medium flex items-center gap-2 rounded px-2 py-1.5 text-neutral-50 duration-200 ease-in-out hover:bg-neutral-50 hover:text-neutral-900 focus:outline-none'
+    onClick={onClick}
   >
     <Icon className='text-secondary-900 size-4' />
     <span>{label}</span>
