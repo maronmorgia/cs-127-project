@@ -15,6 +15,7 @@ import {
   FlaskConical,
   Subtitles,
   FileTextIcon,
+  Pencil,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -95,18 +96,18 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             Facilities
           </h2>
           <SidebarLink
-            label='Reservation Form'
-            href='/reservation'
-            icon={FileText}
+            label='Classrooms'
+            href='/admin/facilities?type=classroom'
+            icon={Pencil}
           />
           <SidebarLink
             label='Laboratory Rooms'
-            href='/labs'
+            href='/admin/facilities?type=laboratory'
             icon={FlaskConical}
           />
           <SidebarLink
             label='Meeting Rooms'
-            href='/meetings'
+            href='/admin/facilities?type=meeting'
             icon={Subtitles}
           />
         </section>
