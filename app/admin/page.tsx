@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Container from '@/app/components/Container';
 import Navbar from '@/app/components/Navbar';
 import {
@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     setIsMounted(true);
@@ -37,6 +38,15 @@ export default function DashboardPage() {
     }
     fetchFacilitiesCount();
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('modal') === 'changePassword') {
+      setTimeout(() => {
+        setShowChangePassword(true);
+      }, 500);
+      window.history.replaceState({}, '', '/admin');
+    }
+  }, [searchParams]);
 
   return (
     <main className='min-h-screen bg-neutral-50'>

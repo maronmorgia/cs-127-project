@@ -8,6 +8,7 @@ import Sidebar from './Sidebar';
 import { createClient } from '@/utils/supabase/client';
 import { logout } from '@/utils/supabase/authentications';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
+import ChangePassword from '@/app/components/ChangePasswordForm';
 
 type NavbarProps = {
   variant: 'home' | 'facility';
@@ -17,6 +18,7 @@ const Navbar = ({ variant }: NavbarProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -191,7 +193,15 @@ const Navbar = ({ variant }: NavbarProps) => {
       </nav>
 
       <hr className='absolute left-0 mt-[72px] w-full border-b border-neutral-400' />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        setShowChangePassword={setShowChangePassword}
+      />
+
+      {showChangePassword && (
+        <ChangePassword onClose={() => setShowChangePassword(false)} />
+      )}
     </header>
   );
 };
