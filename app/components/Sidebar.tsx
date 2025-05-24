@@ -11,7 +11,6 @@ import {
   Home,
   Plus,
   Edit,
-  FileText,
   FlaskConical,
   Subtitles,
   FileTextIcon,

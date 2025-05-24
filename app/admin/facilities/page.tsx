@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import Container from '@/app/components/Container';
 import Navbar from '@/app/components/Navbar';
 import {
@@ -55,7 +56,7 @@ const validationSchema = Yup.object({
     .max(100, 'Capacity cannot exceed 100'),
 });
 
-export default function CreateFacilityPage() {
+function FacilitiesContent() {
   const [view, setView] = useState<'home' | 'form'>('home');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,6 +84,7 @@ export default function CreateFacilityPage() {
       setFilteredFacilities(filtered);
       setFilter(typeFilter);
 
+      // Clear the URL params after applying the filter
       window.history.replaceState({}, '', '/admin/facilities');
     } else {
       setFilteredFacilities(facilities);
@@ -160,9 +162,8 @@ export default function CreateFacilityPage() {
       <Container className='!p-[30px]'>
         {view === 'home' && (
           <section className='flex flex-col items-center justify-center gap-4 text-center'>
-            {/* Existing Facilities */}
+            {/* Search and Filter */}
             <section className='flex w-full flex-col gap-5'>
-              {/* Search Bar */}
               <div className='flex w-full items-center gap-2.5 rounded-[10px] border border-neutral-400 px-3 py-2.5'>
                 <Search className='h-4 w-4 text-black' />
                 <input
@@ -174,7 +175,6 @@ export default function CreateFacilityPage() {
                 />
               </div>
 
-              {/* Filter Dropdown */}
               <div className='relative'>
                 <button
                   onClick={() => setShowFilter(!showFilter)}
@@ -515,5 +515,13 @@ export default function CreateFacilityPage() {
         )}
       </Container>
     </main>
+  );
+}
+
+export default function CreateFacilityPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FacilitiesContent />
+    </Suspense>
   );
 }
