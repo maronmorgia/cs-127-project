@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Container from '@/app/components/Container';
 import Navbar from '@/app/components/Navbar';
@@ -15,10 +15,8 @@ import {
 import { Building2, Calendar, Users } from 'lucide-react';
 import ChangePassword from '@/app/components/ChangePasswordForm';
 import { readFacilities } from '@/utils/supabase/facility';
-//import { readSchedules } from '@/utils/supabase/schedule';
-// import { readAdmins } from '@/utils/supabase/admin';
 
-export default function DashboardPage() {
+function DashboardContent() {
   const [facilitiesCount, setFacilitiesCount] = useState<number | undefined>();
   const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -147,5 +145,13 @@ export default function DashboardPage() {
         </section>
       </Container>
     </main>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
