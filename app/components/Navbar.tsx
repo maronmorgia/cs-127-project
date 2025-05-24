@@ -143,14 +143,16 @@ const Navbar = ({ variant }: NavbarProps) => {
             >
               <header className='flex h-[72px] items-center justify-between gap-[10px] px-3'>
                 <div className='flex items-center gap-3'>
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full text-base font-normal text-white ${
-                      isAdminUser ? 'bg-primary-900' : 'bg-secondary-900'
-                    }`}
-                    style={{ fontFamily: 'var(--font-schibsted)' }}
-                  >
-                    {getInitials()}
-                  </div>
+                  <Link href='/admin'>
+                    <div
+                      className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-base font-normal text-white ${
+                        isAdminUser ? 'bg-primary-900' : 'bg-secondary-900'
+                      }`}
+                      style={{ fontFamily: 'var(--font-schibsted)' }}
+                    >
+                      {getInitials()}
+                    </div>
+                  </Link>
                   <div className='flex flex-col'>
                     <span className='small text-neutral-800'>
                       {isAdminUser
