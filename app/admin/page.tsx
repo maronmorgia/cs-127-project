@@ -56,7 +56,6 @@ function DashboardContent() {
     }
   }, [searchParams]);
 
-
   return (
     <main className='min-h-screen bg-neutral-50'>
       <Navbar variant='facility' />
