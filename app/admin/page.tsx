@@ -15,9 +15,11 @@ import {
 import { Building2, Calendar, Users } from 'lucide-react';
 import ChangePassword from '@/app/components/ChangePasswordForm';
 import { readFacilities } from '@/utils/supabase/facility';
+import { countSchedule } from '@/utils/supabase/schedule';
 
 function DashboardContent() {
   const [facilitiesCount, setFacilitiesCount] = useState<number | undefined>();
+  const [schedulesCount, setSchedulesCount] = useState<number | undefined>();
   const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
@@ -26,15 +28,23 @@ function DashboardContent() {
   useEffect(() => {
     setIsMounted(true);
 
-    async function fetchFacilitiesCount() {
+    async function fetchCounts() {
       try {
         const facilities = await readFacilities();
         setFacilitiesCount(facilities.length);
       } catch {
         setFacilitiesCount(undefined);
       }
+
+      try {
+        const count = await countSchedule();
+        setSchedulesCount(count ?? 0);
+      } catch {
+        setSchedulesCount(undefined);
+      }
     }
-    fetchFacilitiesCount();
+
+    fetchCounts();
   }, []);
 
   useEffect(() => {
@@ -46,6 +56,7 @@ function DashboardContent() {
     }
   }, [searchParams]);
 
+
   return (
     <main className='min-h-screen bg-neutral-50'>
       <Navbar variant='facility' />
@@ -56,7 +67,6 @@ function DashboardContent() {
         <section>
           <div className='mb-8'>
             <Card className='overflow-hidden'>
-              {/* Facility */}
               <div className='grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
                 <div className='flex flex-col items-center justify-center p-4 text-center'>
                   <Building2 className='text-secondary-900 h-8 w-8' />
@@ -65,25 +75,22 @@ function DashboardContent() {
                   </h2>
                   <p className='lead text-neutral-900'>Facilities</p>
                 </div>
-                {/* Event */}
                 <div className='flex flex-col items-center justify-center p-4 text-center'>
                   <Calendar className='text-secondary-900 h-8 w-8' />
-                  <h2 className='text-primary-900 text-2xl font-bold'>0</h2>
-                  {/* Placeholder for events count */}
+                  <h2 className='text-primary-900 text-2xl font-bold'>
+                    {isMounted ? (schedulesCount ?? 0) : 'Loading...'}
+                  </h2>
                   <p className='lead text-neutral-900'>Events</p>
                 </div>
-                {/* Admin */}
                 <div className='flex flex-col items-center justify-center p-4 text-center'>
                   <Users className='text-secondary-900 h-8 w-8' />
-                  <h2 className='text-primary-900 text-2xl font-bold'>0</h2>
-                  {/* Placeholder for admins count */}
+                  <h2 className='text-primary-900 text-2xl font-bold'>1</h2>
                   <p className='lead text-neutral-900'>Admins</p>
                 </div>
               </div>
             </Card>
           </div>
         </section>
-        {/* Management & Account Card Section */}
         <section>
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-2'>
             <Card className='flex h-full flex-col'>
@@ -129,7 +136,6 @@ function DashboardContent() {
               </CardContent>
             </Card>
           </div>
-          {/* Modal Overlay for ChangePassword */}
           {showChangePassword && (
             <div className='bg-opacity-80 fixed inset-0 z-50 flex items-center justify-center'>
               <button
