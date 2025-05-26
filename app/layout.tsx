@@ -44,7 +44,10 @@ const campton = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Takda',
+  title: {
+    default: 'Takda',
+    template: '%s | Takda',
+  },
   description:
     'A reliable room schedule viewer for UP Mindanao, College of Science and Mathematics',
   icons: {
