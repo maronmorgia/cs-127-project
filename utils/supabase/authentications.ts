@@ -140,3 +140,4 @@ export async function updatePassword(formData: FormData) {
   // Return success message if everything went well
   return { success: 'Password updated successfully.' };
 }
+
