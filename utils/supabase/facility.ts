@@ -21,7 +21,23 @@ export async function createFacility(data: FacilityInput) {
     throw new Error('Unauthorized: Only superusers can perform this action');
   }
 
-  const { type, roomname, capacity /*, schedule */ } = data;
+  const { type, roomname, capacity } = data;
+
+  
+  const { data: existingFacility, error: fetchError } = await supabase
+    .from('facilities')
+    .select('id')
+    .eq('roomname', roomname)
+    .maybeSingle(); 
+
+  if (fetchError) {
+    console.error('Error checking for existing facility:', fetchError);
+    throw new Error(fetchError.message);
+  }
+
+  if (existingFacility) {
+    throw new Error(`A facility with room name "${roomname}" already exists.`);
+  }
 
   const { data: result, error } = await supabase
     .from('facilities')
