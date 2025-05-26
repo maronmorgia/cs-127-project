@@ -1,8 +1,7 @@
 'use client';
-
 import { useFormikContext } from 'formik';
 import { CalendarIcon } from 'lucide-react';
-import { format, parse } from 'date-fns';
+import { format, parse, isValid } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,13 +17,56 @@ type FormikDatePickerProps = {
   label: string;
 };
 
-export function DatePicker({ name, label }: FormikDatePickerProps) {
-  const { setFieldValue, values } = useFormikContext<any>();
+// Define a proper type for form values instead of using any
+type FormValues = Record<string, unknown>;
 
+// Helper function to parse different date formats
+const parseDate = (dateValue: string | null | undefined): Date | undefined => {
+  if (!dateValue) return undefined;
+
+  // Try different date formats
+  const formats = [
+    'yyyy-MM-dd', // ISO format from database
+    'MM/dd/yyyy', // US format
+    'dd/MM/yyyy', // European format
+    'yyyy-MM-dd HH:mm:ss', // DateTime format
+  ];
+
+  for (const formatStr of formats) {
+    try {
+      const parsed = parse(dateValue, formatStr, new Date());
+      if (isValid(parsed)) {
+        return parsed;
+      }
+    } catch {
+      // Continue to next format - removed unused error parameter
+    }
+  }
+
+  // Try native Date parsing as fallback
+  try {
+    const nativeDate = new Date(dateValue);
+    if (isValid(nativeDate)) {
+      return nativeDate;
+    }
+  } catch {
+    // Removed unused error parameter
+    console.warn('Could not parse date:', dateValue);
+  }
+
+  return undefined;
+};
+
+export function DatePicker({ name, label }: FormikDatePickerProps) {
+  const { setFieldValue, values } = useFormikContext<FormValues>();
   const rawValue = values[name];
-  const parsedDate = rawValue
-    ? parse(rawValue, 'MM/dd/yyyy', new Date())
-    : undefined;
+
+  console.log(`DatePicker ${name} - Raw value:`, rawValue); // Debug log
+
+  const parsedDate = parseDate(
+    typeof rawValue === 'string' ? rawValue : undefined
+  );
+  console.log(`DatePicker ${name} - Parsed date:`, parsedDate); // Debug log
 
   return (
     <fieldset className='flex flex-col gap-1'>
@@ -42,20 +84,25 @@ export function DatePicker({ name, label }: FormikDatePickerProps) {
             )}
           >
             <CalendarIcon className='mr-2 h-4 w-4' />
-            {parsedDate ? (
+            {parsedDate && isValid(parsedDate) ? (
               format(parsedDate, 'MM/dd/yyyy')
             ) : (
               <span>Pick a date</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className='min-w-[270px]  p-3 border border-neutral-400' align='start'>
+        <PopoverContent
+          className='min-w-[270px] border border-neutral-400 p-3'
+          align='start'
+        >
           <Calendar
             mode='single'
             selected={parsedDate}
             onSelect={(selectedDate) => {
-              if (selectedDate) {
-                const formatted = format(selectedDate, 'MM/dd/yyyy');
+              if (selectedDate && isValid(selectedDate)) {
+                // Store in database-friendly format (YYYY-MM-DD)
+                const formatted = format(selectedDate, 'yyyy-MM-dd');
+                console.log(`DatePicker ${name} - Setting value:`, formatted); // Debug log
                 setFieldValue(name, formatted);
               }
             }}

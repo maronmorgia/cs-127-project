@@ -181,6 +181,11 @@ blockquote {
   @apply text-xl underline;
 }
 
+.sx__range-heading {
+  font-family: var(--font-campton);
+  @apply !text-2xl font-semibold;
+}
+
 /* DARK MODE */
 
 @theme inline {

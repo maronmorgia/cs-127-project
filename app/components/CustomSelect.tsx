@@ -1,7 +1,7 @@
 // CustomSelect.tsx
 'use client';
 
-import { useField, useFormikContext } from 'formik';
+import { useField } from 'formik';
 import {
   Select,
   SelectContent,
@@ -21,18 +21,26 @@ interface CustomSelectProps {
   placeholder?: string;
 }
 
-export function CustomSelect({ name, options, placeholder }: CustomSelectProps) {
+export function CustomSelect({
+  name,
+  options,
+  placeholder,
+}: CustomSelectProps) {
   const [field, , helpers] = useField(name);
   const { setValue } = helpers;
 
   return (
     <Select value={field.value} onValueChange={setValue}>
-      <SelectTrigger className='w-full rounded border border-neutral-400 p-2 text-neutral-900 medium '>
+      <SelectTrigger className='medium w-full rounded border border-neutral-400 p-2 text-neutral-900'>
         <SelectValue placeholder={placeholder || 'Select'} />
       </SelectTrigger>
       <SelectContent className='border border-neutral-400'>
         {options.map((option) => (
-          <SelectItem key={option.value} value={option.value} className="cursor-pointer medium">
+          <SelectItem
+            key={option.value}
+            value={option.value}
+            className='medium cursor-pointer'
+          >
             {option.label}
           </SelectItem>
         ))}
