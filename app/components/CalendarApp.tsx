@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useNextCalendarApp, ScheduleXCalendar } from '@schedule-x/react';
 import {
   createViewDay,
@@ -165,6 +166,7 @@ const EventModal = ({
   onEdit,
   onDelete,
   facilities,
+  isAdminPath,
 }: {
   event: CalendarEvent | null;
   isOpen: boolean;
@@ -172,6 +174,7 @@ const EventModal = ({
   onEdit: () => void;
   onDelete: () => void;
   facilities: Facility[];
+  isAdminPath: boolean;
 }) => {
   if (!isOpen || !event) return null;
 
@@ -227,22 +230,26 @@ const EventModal = ({
           <header className='flex items-center justify-between'>
             <h2 className='large'>{event.title}</h2>
             <div className='flex gap-2.5'>
-              <button
-                onClick={onEdit}
-                aria-label='Edit schedule'
-                className='rounded'
-                title='Edit'
-              >
-                <Edit3 className='size-5 cursor-pointer text-white' />
-              </button>
-              <button
-                onClick={onDelete}
-                aria-label='Delete schedule'
-                className='rounded'
-                title='Delete'
-              >
-                <Trash2 className='size-5 cursor-pointer text-white' />
-              </button>
+              {isAdminPath && (
+                <>
+                  <button
+                    onClick={onEdit}
+                    aria-label='Edit schedule'
+                    className='rounded'
+                    title='Edit'
+                  >
+                    <Edit3 className='size-5 cursor-pointer text-white' />
+                  </button>
+                  <button
+                    onClick={onDelete}
+                    aria-label='Delete schedule'
+                    className='rounded'
+                    title='Delete'
+                  >
+                    <Trash2 className='size-5 cursor-pointer text-white' />
+                  </button>
+                </>
+              )}
               <button
                 onClick={onClose}
                 aria-label='Close menu'
@@ -403,12 +410,12 @@ const generateRecurringEvents = (
 
         events.push({
           id: `${schedule.id}-${eventDate}-${targetDay}`,
-          title: schedule.event, // Only the event title is shown in the calendar
+          title: schedule.event, 
           start: formatDateTimeForScheduleX(eventDate, schedule.time_start),
           end: formatDateTimeForScheduleX(eventDate, schedule.time_end),
           description: `${schedule.description}\n\nFaculty: ${schedule.faculty_in_charge}`,
-          scheduleData: schedule, // Store original schedule data
-          calendarId: getFacilityColorClass(facilityType), // Add calendar ID for styling
+          scheduleData: schedule, 
+          calendarId: getFacilityColorClass(facilityType), 
         });
 
         // Move to next week
@@ -426,12 +433,12 @@ const generateRecurringEvents = (
 
       events.push({
         id: `${schedule.id}-${eventDate}-daily`,
-        title: schedule.event, // Only the event title is shown in the calendar
+        title: schedule.event, 
         start: formatDateTimeForScheduleX(eventDate, schedule.time_start),
         end: formatDateTimeForScheduleX(eventDate, schedule.time_end),
         description: `${schedule.description}\n\nFaculty: ${schedule.faculty_in_charge}`,
-        scheduleData: schedule, // Store original schedule data
-        calendarId: getFacilityColorClass(facilityType), // Add calendar ID for styling
+        scheduleData: schedule, 
+        calendarId: getFacilityColorClass(facilityType), 
       });
 
       // Move to next day
@@ -449,6 +456,9 @@ export default function CalendarApp({
   onEditSchedule,
   onDeleteSchedule,
 }: CalendarAppProps) {
+  const pathname = usePathname();
+  const isAdminPath = pathname.includes('/admin');
+
   const [isCalendarReady, setIsCalendarReady] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null
@@ -636,15 +646,17 @@ export default function CalendarApp({
         onEdit={handleEditEvent}
         onDelete={handleDeleteEvent}
         facilities={facilities}
+        isAdminPath={isAdminPath}
       />
 
-      {/* Delete Confirmation Modal */}
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onClose={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-        eventTitle={selectedEvent?.title || ''}
-      />
+      {isAdminPath && (
+        <DeleteConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          eventTitle={selectedEvent?.title || ''}
+        />
+      )}
     </section>
   );
 }
