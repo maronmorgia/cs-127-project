@@ -410,12 +410,12 @@ const generateRecurringEvents = (
 
         events.push({
           id: `${schedule.id}-${eventDate}-${targetDay}`,
-          title: schedule.event, 
+          title: schedule.event,
           start: formatDateTimeForScheduleX(eventDate, schedule.time_start),
           end: formatDateTimeForScheduleX(eventDate, schedule.time_end),
           description: `${schedule.description}\n\nFaculty: ${schedule.faculty_in_charge}`,
-          scheduleData: schedule, 
-          calendarId: getFacilityColorClass(facilityType), 
+          scheduleData: schedule,
+          calendarId: getFacilityColorClass(facilityType),
         });
 
         // Move to next week
@@ -433,12 +433,12 @@ const generateRecurringEvents = (
 
       events.push({
         id: `${schedule.id}-${eventDate}-daily`,
-        title: schedule.event, 
+        title: schedule.event,
         start: formatDateTimeForScheduleX(eventDate, schedule.time_start),
         end: formatDateTimeForScheduleX(eventDate, schedule.time_end),
         description: `${schedule.description}\n\nFaculty: ${schedule.faculty_in_charge}`,
-        scheduleData: schedule, 
-        calendarId: getFacilityColorClass(facilityType), 
+        scheduleData: schedule,
+        calendarId: getFacilityColorClass(facilityType),
       });
 
       // Move to next day
