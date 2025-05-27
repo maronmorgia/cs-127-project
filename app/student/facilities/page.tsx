@@ -6,12 +6,17 @@ import { readFacilities } from '@/utils/supabase/facility';
 import { useState, useEffect } from 'react';
 import { Funnel, Search } from 'lucide-react';
 import FacilityCard, { Facility } from '@/app/components/FacilityCard';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function UserFacilityPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const typeParam = searchParams.get('type');
+
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState<string>(typeParam || 'all');
   const [searchId, setSearchId] = useState<string>('');
   const [showFilter, setShowFilter] = useState(false);
 
@@ -31,6 +36,12 @@ export default function UserFacilityPage() {
     fetchFacilities();
   }, []);
 
+  useEffect(() => {
+    if (typeParam) {
+      setFilter(typeParam);
+    }
+  }, [typeParam]);
+
   const filteredFacilities = facilities.filter((facility) => {
     const matchType = filter === 'all' || facility.type === filter;
     const matchId = searchId === '' || facility.roomname.includes(searchId);
@@ -42,7 +53,6 @@ export default function UserFacilityPage() {
       <Navbar variant='facility' />
       <Container className='!p-[30px]'>
         <section className='flex flex-col justify-center gap-4 text-center'>
-          {/* Search Bar */}
           <div className='flex w-full items-center gap-2.5 rounded-[10px] border border-neutral-400 px-3 py-2.5'>
             <Search className='h-4 w-4 text-black' />
             <input
@@ -54,7 +64,6 @@ export default function UserFacilityPage() {
             />
           </div>
 
-          {/* Filter Dropdown */}
           <div className='relative'>
             <button
               onClick={() => setShowFilter(!showFilter)}
@@ -74,7 +83,9 @@ export default function UserFacilityPage() {
                           filter === type ? 'font-semibold' : ''
                         }`}
                         onClick={() => {
-                          setFilter(type);
+                          router.push(
+                            `/student/facilities${type === 'all' ? '' : `?type=${type}`}`
+                          );
                           setShowFilter(false);
                         }}
                       >
@@ -89,7 +100,6 @@ export default function UserFacilityPage() {
             )}
           </div>
 
-          {/* Facility List */}
           <section className='w-full max-w-[575px] border-t border-neutral-400'>
             {loading ? (
               <p>Loading...</p>
