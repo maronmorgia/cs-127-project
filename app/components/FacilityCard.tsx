@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pencil, FlaskConical, Subtitles, Plus } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export type Facility = {
   id: number;
@@ -20,8 +21,16 @@ export default function FacilityCard({
   onEdit,
   onDelete,
 }: FacilityCardProps) {
+  const pathname = usePathname();
+  const isAdminPath = pathname.includes('/admin');
+
   const { type, roomname, capacity } = facility;
   const [showPopup, setShowPopup] = useState(false);
+
+  // Determine the schedule route based on admin path
+  const scheduleRoute = isAdminPath
+    ? `/admin/schedule?room=${encodeURIComponent(roomname)}`
+    : `/student/schedule?roomname=${encodeURIComponent(roomname)}`;
 
   const backgroundClass =
     {
@@ -74,11 +83,12 @@ export default function FacilityCard({
         </figure>
       </div>
       <p className='lead text-white uppercase'>Capacity: {capacity || 'N/A'}</p>
-      <Link href={`/admin/schedule?room=${encodeURIComponent(roomname)}`}>
-  <button className='large w-full cursor-pointer rounded-md border-2 border-neutral-50 px-4 py-2 text-white'>
-    Show Schedule
-  </button>
-</Link>
+
+      <Link href={scheduleRoute}>
+        <button className='large w-full cursor-pointer rounded-md border-2 border-neutral-50 px-4 py-2 text-white'>
+          Show Schedule
+        </button>
+      </Link>
 
       {onEdit && onDelete && (
         <div className='flex w-full justify-between gap-2.5'>
