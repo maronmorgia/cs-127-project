@@ -89,7 +89,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && pathname.startsWith('/student/login')) {
     const url = request.nextUrl.clone();
-    url.pathname = '/student/faculty';
+    url.pathname = '/student/facilities';
     return NextResponse.redirect(url);
   }
 

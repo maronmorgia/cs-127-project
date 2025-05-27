@@ -26,12 +26,14 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const pathname = usePathname();
   const router = useRouter();
+
   const isAdminPath = pathname.startsWith('/admin');
+  const isStudentPath = pathname.startsWith('/student');
+  const basePath = isAdminPath ? '/admin' : isStudentPath ? '/student' : '';
 
   const handleChangePasswordClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onClose();
-
     router.push('/admin?modal=changePassword');
   };
 
@@ -50,9 +52,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
           open ? 'translate-x-0' : '-translate-x-full'
         )}
         role='navigation'
-        aria-label='Admin sidebar'
+        aria-label='Sidebar'
       >
-        {/* Top section */}
         <div className='flex items-center justify-between px-7 py-3 text-neutral-50'>
           <Logo variant='full' />
           <button
@@ -64,12 +65,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
           </button>
         </div>
 
-        {/* Navigation links */}
         <nav className='flex flex-col gap-2 px-5 py-3'>
           <SidebarLink label='Home' href='/' icon={Home} />
         </nav>
 
-        {/* Admin section (visible only in /admin paths) */}
         {isAdminPath && (
           <section className='px-5 py-1.5'>
             <h2 className='lead px-2 py-1.5 leading-7 text-neutral-50'>
@@ -77,41 +76,39 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             </h2>
             <SidebarLink
               label='Add Facility'
-              href='/admin/facilities'
+              href={`${basePath}/facilities`}
               icon={Plus}
             />
             <SidebarLink
               label='Change Password'
-              href='/admin'
+              href={basePath}
               icon={Edit}
               onClick={handleChangePasswordClick}
             />
           </section>
         )}
 
-        {/* Facilities section */}
         <section className='px-5 py-3'>
           <h2 className='lead px-2 py-1.5 leading-7 text-neutral-50'>
             Facilities
           </h2>
           <SidebarLink
             label='Classrooms'
-            href='/admin/facilities?type=classroom'
+            href={`${basePath}/facilities?type=classroom`}
             icon={Pencil}
           />
           <SidebarLink
             label='Laboratory Rooms'
-            href='/admin/facilities?type=laboratory'
+            href={`${basePath}/facilities?type=laboratory`}
             icon={FlaskConical}
           />
           <SidebarLink
             label='Meeting Rooms'
-            href='/admin/facilities?type=meeting'
+            href={`${basePath}/facilities?type=meeting`}
             icon={Subtitles}
           />
         </section>
 
-        {/* Forms Section */}
         <section className='px-5 py-3'>
           <h2 className='lead px-2 py-1.5 leading-7 text-neutral-50'>Forms</h2>
           <SidebarLink
