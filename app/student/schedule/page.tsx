@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import { readSchedules } from '@/utils/supabase/schedule';
 import { readFacilities } from '@/utils/supabase/facility';
@@ -36,7 +37,6 @@ type FacilityFormValues = {
   capacity: number | string;
 };
 
-// Use Record types for maximum flexibility
 type ScheduleRecord = Record<string, unknown> & {
   id: number;
   facility_id: string;
@@ -65,24 +65,28 @@ export default function UserSchedulePage() {
   const [facilities, setFacilities] = useState<FacilityRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFacilityId, setSelectedFacilityId] = useState<string>('');
+  const searchParams = useSearchParams();
 
-  // Fetch data function
   const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Fetching schedules and facilities...');
 
       const [scheduleData, facilityData] = await Promise.all([
         readSchedules(),
         readFacilities(),
       ]);
 
-      console.log('Fetched schedules:', scheduleData?.length || 0);
-      console.log('Fetched facilities:', facilityData?.length || 0);
-
+      const facilitiesList = (facilityData as FacilityRecord[]) || [];
+      setFacilities(facilitiesList);
       setSchedules((scheduleData as ScheduleRecord[]) || []);
-      setFacilities((facilityData as FacilityRecord[]) || []);
+
+      const roomnameParam = searchParams.get('roomname');
+      if (roomnameParam) {
+        const match = facilitiesList.find((f) => f.roomname === roomnameParam);
+        if (match) setSelectedFacilityId(match.id);
+      }
     } catch (err) {
       console.error('Error fetching data:', err);
       setError('Failed to load data. Please refresh the page.');
@@ -94,6 +98,10 @@ export default function UserSchedulePage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredSchedules = selectedFacilityId
+    ? schedules.filter((s) => s.facility_id === selectedFacilityId)
+    : schedules;
 
   if (loading) {
     return (
@@ -153,9 +161,27 @@ export default function UserSchedulePage() {
             </p>
           </header>
 
-          {/* Calendar component for viewing only */}
+          <div className='w-full max-w-[300px] mb-4'>
+            <label htmlFor='facilityFilter' className='medium text-neutral-900 mb-1 block'>
+              Filter by Facility
+            </label>
+            <select
+              id='facilityFilter'
+              value={selectedFacilityId}
+              onChange={(e) => setSelectedFacilityId(e.target.value)}
+              className='w-full rounded border border-neutral-400 bg-white p-2 text-black'
+            >
+              <option value=''>All Facilities</option>
+              {facilities.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.roomname} ({f.type})
+                </option>
+              ))}
+            </select>
+          </div>
+
           <CalendarApp
-            schedules={schedules as ScheduleFormValues[]}
+            schedules={filteredSchedules as ScheduleFormValues[]}
             facilities={facilities as FacilityFormValues[]}
           />
         </section>
