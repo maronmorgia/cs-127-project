@@ -74,11 +74,12 @@ export default function FacilityCard({
         </figure>
       </div>
       <p className='lead text-white uppercase'>Capacity: {capacity || 'N/A'}</p>
-      <Link href='/'>
-        <button className='large w-full cursor-pointer rounded-md border-2 border-neutral-50 px-4 py-2 text-white'>
-          Show Schedule
-        </button>
-      </Link>
+      <Link href={`/admin/schedule?room=${encodeURIComponent(roomname)}`}>
+  <button className='large w-full cursor-pointer rounded-md border-2 border-neutral-50 px-4 py-2 text-white'>
+    Show Schedule
+  </button>
+</Link>
+
       {onEdit && onDelete && (
         <div className='flex w-full justify-between gap-2.5'>
           <button
