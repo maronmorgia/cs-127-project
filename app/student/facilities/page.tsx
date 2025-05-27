@@ -7,8 +7,10 @@ import { useState, useEffect } from 'react';
 import { Funnel, Search } from 'lucide-react';
 import FacilityCard, { Facility } from '@/app/components/FacilityCard';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import { TIMEOUT } from 'dns';
 
-export default function UserFacilityPage() {
+function UserFacilityPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const typeParam = searchParams.get('type');
@@ -116,5 +118,13 @@ export default function UserFacilityPage() {
         </section>
       </Container>
     </main>
+  );
+}
+
+export default function CreateFacilityPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UserFacilityPage />
+    </Suspense>
   );
 }
