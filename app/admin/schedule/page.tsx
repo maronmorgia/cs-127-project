@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Formik, Field, Form, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -70,9 +70,11 @@ type FacilityRecord = Record<string, unknown> & {
   id: string;
   roomname: string;
   type: string;
+  capacity: number;
 };
 
-export default function SchedulePage() {
+// Separate component that uses useSearchParams
+function SchedulePageContent() {
   const [view, setView] = useState<'home' | 'form'>('home');
   const [schedules, setSchedules] = useState<ScheduleRecord[]>([]);
   const [facilities, setFacilities] = useState<FacilityRecord[]>([]);
@@ -113,15 +115,15 @@ export default function SchedulePage() {
   }, []);
 
   useEffect(() => {
-  if (roomFilter && facilities.length > 0) {
-    const matchedFacility = facilities.find(
-      (f) => f.roomname.toLowerCase() === roomFilter.toLowerCase()
-    );
-    if (matchedFacility) {
-      setSelectedFacilityId(matchedFacility.id);
+    if (roomFilter && facilities.length > 0) {
+      const matchedFacility = facilities.find(
+        (f) => f.roomname.toLowerCase() === roomFilter.toLowerCase()
+      );
+      if (matchedFacility) {
+        setSelectedFacilityId(matchedFacility.id);
+      }
     }
-  }
-}, [roomFilter, facilities]);
+  }, [roomFilter, facilities]);
 
   const validationSchema = Yup.object({
     facility_id: Yup.string().required('Facility is required'),
@@ -368,9 +370,11 @@ export default function SchedulePage() {
               </ul> */}
             </section>
 
-            {/* Calendar component with edit and delete handlers */}
-            <div className='w-full max-w-[300px] mb-4'>
-              <label htmlFor='facilityFilter' className='medium text-neutral-900 mb-1 block'>
+            <div className='w-full max-w-[300px]'>
+              <label
+                htmlFor='facilityFilter'
+                className='medium mb-1 block text-neutral-900'
+              >
                 Filter by Facility
               </label>
               <select
@@ -388,10 +392,48 @@ export default function SchedulePage() {
               </select>
             </div>
 
+            {selectedFacilityId &&
+              (() => {
+                const selectedFacility = facilities.find(
+                  (f) => f.id === selectedFacilityId
+                );
+                if (!selectedFacility) return null;
+
+                return (
+                  <section
+                    className='mb-4 w-full bg-neutral-200'
+                    aria-labelledby='facility-info-heading'
+                  >
+                    <div className='flex flex-col gap-1.5 rounded border border-neutral-400 p-3'>
+                      <header>
+                        <h3
+                          id='facility-info-heading'
+                          className='large leading-7 text-neutral-900'
+                        >
+                          {selectedFacility.roomname}
+                        </h3>
+                      </header>
+                      <div className='facility-details'>
+                        <p className='small text-neutral-900'>
+                          <span className='sr-only'>Facility Type: </span>
+                          {selectedFacility.type}
+                        </p>
+                        <p className='small text-neutral-900'>
+                          <span className='sr-only'>Room </span>
+                          Capacity: {selectedFacility.capacity}
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+                );
+              })()}
+
             <CalendarApp
               schedules={
                 selectedFacilityId
-                  ? (schedules.filter((s) => s.facility_id === selectedFacilityId) as ScheduleFormValues[])
+                  ? (schedules.filter(
+                      (s) => s.facility_id === selectedFacilityId
+                    ) as ScheduleFormValues[])
                   : (schedules as ScheduleFormValues[])
               }
               facilities={facilities as FacilityFormValues[]}
@@ -399,7 +441,7 @@ export default function SchedulePage() {
               onDeleteSchedule={handleCalendarDelete}
             />
           </section>
-      )}
+        )}
         {view === 'form' && (
           <section className='flex flex-col gap-7'>
             <header>
@@ -694,5 +736,27 @@ export default function SchedulePage() {
         )}
       </Container>
     </main>
+  );
+}
+
+// Loading component for Suspense fallback
+function SchedulePageLoading() {
+  return (
+    <main>
+      <Navbar variant='facility' />
+      <Container className='!py-[30px]'>
+        <div className='flex h-64 items-center justify-center'>
+          <div className='text-lg'>Loading...</div>
+        </div>
+      </Container>
+    </main>
+  );
+}
+
+export default function SchedulePage() {
+  return (
+    <Suspense fallback={<SchedulePageLoading />}>
+      <SchedulePageContent />
+    </Suspense>
   );
 }

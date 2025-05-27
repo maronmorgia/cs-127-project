@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import { readSchedules } from '@/utils/supabase/schedule';
@@ -58,9 +58,25 @@ type FacilityRecord = Record<string, unknown> & {
   id: string;
   roomname: string;
   type: string;
+  capacity: number;
 };
 
-export default function UserSchedulePage() {
+// Loading component for Suspense fallback
+function ScheduleLoading() {
+  return (
+    <main>
+      <Navbar variant='facility' />
+      <Container className='!py-[30px]'>
+        <div className='flex h-64 items-center justify-center'>
+          <div className='text-lg'>Loading...</div>
+        </div>
+      </Container>
+    </main>
+  );
+}
+
+// Component that uses useSearchParams - needs to be separate
+function SchedulePageContent() {
   const [schedules, setSchedules] = useState<ScheduleRecord[]>([]);
   const [facilities, setFacilities] = useState<FacilityRecord[]>([]);
   const [loading, setLoading] = useState(false);
@@ -161,8 +177,11 @@ export default function UserSchedulePage() {
             </p>
           </header>
 
-          <div className='w-full max-w-[300px] mb-4'>
-            <label htmlFor='facilityFilter' className='medium text-neutral-900 mb-1 block'>
+          <div className='mb-4 w-full max-w-[300px]'>
+            <label
+              htmlFor='facilityFilter'
+              className='medium mb-1 block text-neutral-900'
+            >
               Filter by Facility
             </label>
             <select
@@ -180,6 +199,42 @@ export default function UserSchedulePage() {
             </select>
           </div>
 
+          {selectedFacilityId &&
+            (() => {
+              const selectedFacility = facilities.find(
+                (f) => f.id === selectedFacilityId
+              );
+              if (!selectedFacility) return null;
+
+              return (
+                <section
+                  className='mb-4 w-full bg-neutral-200'
+                  aria-labelledby='facility-info-heading'
+                >
+                  <div className='flex flex-col gap-1.5 rounded border border-neutral-400 p-3'>
+                    <header>
+                      <h3
+                        id='facility-info-heading'
+                        className='large leading-7 text-neutral-900'
+                      >
+                        {selectedFacility.roomname}
+                      </h3>
+                    </header>
+                    <div className='facility-details'>
+                      <p className='small text-neutral-900'>
+                        <span className='sr-only'>Facility Type: </span>
+                        {selectedFacility.type}
+                      </p>
+                      <p className='small text-neutral-900'>
+                        <span className='sr-only'>Room </span>
+                        Capacity: {selectedFacility.capacity}
+                      </p>
+                    </div>
+                  </div>
+                </section>
+              );
+            })()}
+
           <CalendarApp
             schedules={filteredSchedules as ScheduleFormValues[]}
             facilities={facilities as FacilityFormValues[]}
@@ -187,5 +242,13 @@ export default function UserSchedulePage() {
         </section>
       </Container>
     </main>
+  );
+}
+
+export default function UserSchedulePage() {
+  return (
+    <Suspense fallback={<ScheduleLoading />}>
+      <SchedulePageContent />
+    </Suspense>
   );
 }
