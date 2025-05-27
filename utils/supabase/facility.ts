@@ -23,12 +23,11 @@ export async function createFacility(data: FacilityInput) {
 
   const { type, roomname, capacity } = data;
 
-  
   const { data: existingFacility, error: fetchError } = await supabase
     .from('facilities')
     .select('id')
     .eq('roomname', roomname)
-    .maybeSingle(); 
+    .maybeSingle();
 
   if (fetchError) {
     console.error('Error checking for existing facility:', fetchError);
