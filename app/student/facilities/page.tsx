@@ -8,7 +8,6 @@ import { Funnel, Search } from 'lucide-react';
 import FacilityCard, { Facility } from '@/app/components/FacilityCard';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense } from 'react';
-import { TIMEOUT } from 'dns';
 
 function UserFacilityPage() {
   const searchParams = useSearchParams();
