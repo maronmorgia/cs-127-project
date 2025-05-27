@@ -114,3 +114,18 @@ export async function deleteSchedule(id: number) {
     throw new Error(error.message);
   }
 }
+
+export async function countSchedule() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('schedule')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) {
+    console.error('Error counting schedules:', error);
+    throw new Error(error.message);
+  }
+
+  return count;
+}
