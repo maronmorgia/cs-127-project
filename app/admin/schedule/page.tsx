@@ -75,6 +75,7 @@ export default function SchedulePage() {
   const [view, setView] = useState<'home' | 'form'>('home');
   const [schedules, setSchedules] = useState<ScheduleRecord[]>([]);
   const [facilities, setFacilities] = useState<FacilityRecord[]>([]);
+  const [selectedFacilityId, setSelectedFacilityId] = useState<string>('');
   const [editValues, setEditValues] = useState<ScheduleFormValues | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -354,15 +355,37 @@ export default function SchedulePage() {
             </section>
 
             {/* Calendar component with edit and delete handlers */}
+            <div className='w-full max-w-[300px] mb-4'>
+              <label htmlFor='facilityFilter' className='medium text-neutral-900 mb-1 block'>
+                Filter by Facility
+              </label>
+              <select
+                id='facilityFilter'
+                value={selectedFacilityId}
+                onChange={(e) => setSelectedFacilityId(e.target.value)}
+                className='w-full rounded border border-neutral-400 bg-white p-2 text-black'
+              >
+                <option value=''>All Facilities</option>
+                {facilities.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.roomname} ({f.type})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <CalendarApp
-              schedules={schedules as ScheduleFormValues[]}
+              schedules={
+                selectedFacilityId
+                  ? (schedules.filter((s) => s.facility_id === selectedFacilityId) as ScheduleFormValues[])
+                  : (schedules as ScheduleFormValues[])
+              }
               facilities={facilities as FacilityFormValues[]}
               onEditSchedule={handleCalendarEdit}
               onDeleteSchedule={handleCalendarDelete}
             />
           </section>
-        )}
-
+      )}
         {view === 'form' && (
           <section className='flex flex-col gap-7'>
             <header>
