@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Formik, Field, Form, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Navbar from '@/app/components/Navbar';
@@ -79,6 +80,8 @@ export default function SchedulePage() {
   const [editValues, setEditValues] = useState<ScheduleFormValues | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const roomFilter = searchParams.get('room');
 
   // Fetch data function
   const fetchData = async () => {
@@ -108,6 +111,17 @@ export default function SchedulePage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+  if (roomFilter && facilities.length > 0) {
+    const matchedFacility = facilities.find(
+      (f) => f.roomname.toLowerCase() === roomFilter.toLowerCase()
+    );
+    if (matchedFacility) {
+      setSelectedFacilityId(matchedFacility.id);
+    }
+  }
+}, [roomFilter, facilities]);
 
   const validationSchema = Yup.object({
     facility_id: Yup.string().required('Facility is required'),
