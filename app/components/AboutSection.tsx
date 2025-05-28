@@ -24,8 +24,11 @@ export default function AboutTakda() {
           </div>
 
           {/* Screenshot Placeholder */}
-          <figure className='h-[264px] w-full rounded-[9px] bg-neutral-50 shadow-[inset_0px_4px_4px_0px_rgba(0,0,0,0.25)] md:w-1/2'>
-            <img src='/CalendarPIC.png' />
+          <figure className='h-[350px] w-full rounded-[9px] bg-neutral-50 shadow-[inset_0px_4px_4px_0px_rgba(0,0,0,0.25)] md:w-1/2'>
+            <img
+              src='/CalendarPIC.png'
+              className='h-full w-full rounded-[9px] object-cover'
+            />
           </figure>
         </article>
       </Container>
